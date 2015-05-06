@@ -3,8 +3,8 @@ apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
 version = "1.0.0"
-def siteUrl = 'https://github.com/kaldarel/TSMLibrary'
-def gitUrl = 'https://github.com/kaldarel/TSMLibrary.git'
+def siteUrl = 'https://github.com/tismart/TSMLibraries'
+def gitUrl = 'https://github.com/tismart/TSMLibraries.git'
 group = "com.tismart.libraries"
 
 android {
