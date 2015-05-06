@@ -9,6 +9,8 @@ import java.io.FileReader;
 
 /**
  * Created by luis.rios on 29/04/2015.
+ *
+ *
  */
 public class MemoryInfo {
 
@@ -42,7 +44,7 @@ public class MemoryInfo {
                 br.close();
             }
 
-            long totalMem = 0L;
+            long totalMem;
 
             if (aLine == null || aLine.length() < 0)
                 return "";
@@ -57,7 +59,7 @@ public class MemoryInfo {
         }
     }
 
-    public static String getMemoryRAMTotal(Context mContext) {
+    public static String getMemoryRAMTotal() {
         try {
             File f = new File("/proc/meminfo");
             String aLine = null;
@@ -70,7 +72,7 @@ public class MemoryInfo {
                 br.close();
             }
 
-            long totalMem = 0L;
+            long totalMem;
 
             if (aLine == null || aLine.length() < 0)
                 return "";

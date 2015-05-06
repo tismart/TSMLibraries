@@ -9,11 +9,14 @@ import java.util.List;
 
 /**
  * Created by luis.rios on 29/04/2015.
+ *
+ *
  */
 public class AppInfo {
 
     //ScreenSize, ScreenDensity, ScreenOrientation, MemoryRAMFree, MemoryRAMUsed, MemoryRAMTotal, DiskHDFree, DiskHDUsed, DiskHDTotal, DiskSDFree, DiskSDUsed, DiskSDTotal, AppsOpen, AppsName, NetworkConnection, NetworkType, NetworkStrength, OSVersion, OSName, DeviceBattery, DeviceType, DeviceModel, DeviceID, DeviceRooted
 
+    @SuppressWarnings("deprecation")
     public static String getAppsOpenNumber(Context mContext) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             try {
@@ -27,6 +30,7 @@ public class AppInfo {
             return "";
     }
 
+    @SuppressWarnings("deprecation")
     public static String getAppsOpenName(Context mContext) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             try {
@@ -38,6 +42,7 @@ public class AppInfo {
                     try {
                         sb.append(packageManager.getApplicationLabel(packageManager.getApplicationInfo(tasks.get(i).baseActivity.getPackageName(), 0))).append("\n");
                     } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
                 }
                 String sAppsName = sb.toString();

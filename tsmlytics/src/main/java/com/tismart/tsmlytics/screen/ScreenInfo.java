@@ -10,6 +10,8 @@ import android.view.WindowManager;
 
 /**
  * Created by luis.rios on 29/04/2015.
+ *
+ *
  */
 public class ScreenInfo {
 

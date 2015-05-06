@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="tsmlibrary_typeface" format="enum">
+        <enum name="regular" value="0" />
+        <enum name="bold" value="1" />
+        <enum name="light" value="2" />
+        <enum name="black" value="3" />
+        <enum name="medium" value="4" />
+        <enum name="thin" value="5" />
+    </attr>
+    <declare-styleable name="tsmlibrary_custom_view">
+        <attr name="tsmlibrary_typeface" />
+    </declare-styleable>
+</resources>

@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
-    TextView tv;
+    private TextView tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

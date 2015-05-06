@@ -6,11 +6,14 @@ import java.lang.reflect.Field;
 
 /**
  * Created by luis.rios on 29/04/2015.
+ *
+ *
  */
 public class OSInfo {
 
     //ScreenSize, ScreenDensity, ScreenOrientation, MemoryRAMFree, MemoryRAMUsed, MemoryRAMTotal, DiskHDFree, DiskHDUsed, DiskHDTotal, DiskSDFree, DiskSDUsed, DiskSDTotal, AppsOpen, AppsName, NetworkConnection, NetworkType, NetworkStrength, OSVersion, OSName, DeviceBattery, DeviceType, DeviceModel, DeviceID, DeviceRooted
 
+    @SuppressWarnings("SameReturnValue")
     public static String getOSVersion() {
         return Build.VERSION.RELEASE;
     }
@@ -24,6 +27,7 @@ public class OSInfo {
             try {
                 fieldValue = field.getInt(new Object());
             } catch (Exception ex) {
+                ex.printStackTrace();
             }
             if (fieldValue == Build.VERSION.SDK_INT) {
                 fieldName = fieldName.replace("_", " ");

@@ -10,12 +10,14 @@ import android.telephony.TelephonyManager;
 
 /**
  * Created by luis.rios on 29/04/2015.
+ *
+ *
  */
 public class NetworkInfo {
 
     //ScreenSize, ScreenDensity, ScreenOrientation, MemoryRAMFree, MemoryRAMUsed, MemoryRAMTotal, DiskHDFree, DiskHDUsed, DiskHDTotal, DiskSDFree, DiskSDUsed, DiskSDTotal, AppsOpen, AppsName, NetworkConnection, NetworkType, NetworkStrength, OSVersion, OSName, DeviceBattery, DeviceType, DeviceModel, DeviceID, DeviceRooted
 
-    private static CustomPhoneStateListener phoneStateListener = new CustomPhoneStateListener();
+    private static final CustomPhoneStateListener phoneStateListener = new CustomPhoneStateListener();
 
     public static String getNetworkConnection(Context mContext) {
         try {

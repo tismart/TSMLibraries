@@ -16,6 +16,7 @@ import java.io.InputStreamReader;
 
 /**
  * Created by luis.rios on 29/04/2015.
+ *
  */
 public class DeviceInfo {
 
@@ -24,8 +25,8 @@ public class DeviceInfo {
     public static String getDeviceBattery(Context mContext) {
         try {
             Intent batteryIntent = mContext.registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
-            int level = batteryIntent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
-            int scale = batteryIntent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+            int level = batteryIntent != null ? batteryIntent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1) : 0;
+            int scale = batteryIntent != null ? batteryIntent.getIntExtra(BatteryManager.EXTRA_SCALE, -1) : 0;
 
             // Error checking that probably isn't needed but I added just in case.
             if (level == -1 || scale == -1) {
@@ -49,9 +50,9 @@ public class DeviceInfo {
         }
     }
 
-    public static String getDeviceModel(Context mContext) {
+    public static String getDeviceModel() {
         try {
-            String sModel = "";
+            String sModel;
             if (Build.MODEL.startsWith(Build.MANUFACTURER)) {
                 sModel = Build.MODEL + " (" + Build.BOARD + ")";
             } else {
@@ -71,7 +72,7 @@ public class DeviceInfo {
         }
     }
 
-    public static String getDeviceRooted(Context mContext) {
+    public static String getDeviceRooted() {
         return (checkRootMethod1() || checkRootMethod2() || checkRootMethod3() || checkRootMethod4()) + "";
     }
 
@@ -110,8 +111,7 @@ public class DeviceInfo {
         try {
             process = Runtime.getRuntime().exec(new String[]{"/system/xbin/which", "su"});
             BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            if (in.readLine() != null) return true;
-            return false;
+            return in.readLine() != null;
         } catch (Throwable t) {
             return false;
         } finally {

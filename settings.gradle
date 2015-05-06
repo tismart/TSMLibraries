@@ -1,1 +1,1 @@
-include ':tsmlytics', ':myapplication'
+include ':tsmlytics', ':myapplication', ':tsmlibrary'
