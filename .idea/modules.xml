@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/TSMLibraries.iml" filepath="$PROJECT_DIR$/TSMLibraries.iml" />
+      <module fileurl="file://$PROJECT_DIR$/myapplication/myapplication.iml" filepath="$PROJECT_DIR$/myapplication/myapplication.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tsmlytics/tsmlytics.iml" filepath="$PROJECT_DIR$/tsmlytics/tsmlytics.iml" />
+    </modules>
+  </component>
+</project>
+
