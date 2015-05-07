@@ -48,4 +48,8 @@ public class CustomEditText extends EditText {
             setTypeface(mTypefaceUtils.getTypeface(fontValue));
         }
     }
+
+    public void setTypefaceUtils(TypefaceUtils typefaceUtils) {
+        this.mTypefaceUtils = typefaceUtils;
+    }
 }

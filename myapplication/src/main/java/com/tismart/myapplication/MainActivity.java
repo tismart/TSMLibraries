@@ -5,9 +5,12 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
+import com.tismart.myapplication.daos.EntidadDAO;
+import com.tismart.myapplication.entities.Entidad;
 import com.tismart.tsmlytics.TSMLytics;
 import com.tismart.tsmlytics.enums.TSMLyticsEnum;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
@@ -149,5 +152,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }, 2000);
+
+        EntidadDAO daoEntidad = new EntidadDAO();
+        ArrayList<Entidad> lst = daoEntidad.listEntities(null);
+        lst.clone();
     }
 }

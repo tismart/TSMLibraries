@@ -55,6 +55,9 @@ public class SQLDatabaseHelper extends SQLiteOpenHelper {
                 copyDatabase();
             }
         }
+        if (!existsDatabase()) {
+            createDatabase(fromAssets);
+        }
     }
 
     private void copyDatabaseFromAssets() throws IOException {
@@ -62,7 +65,7 @@ public class SQLDatabaseHelper extends SQLiteOpenHelper {
         InputStream myInput;
         byte[] buffer = new byte[1024];
         int length;
-        myInput = context.getAssets().open(DB_NAME);
+        myInput = context.getAssets().open("MyApplication.sqlite");
         f = new File(DB_PATH);
         if (!f.exists()) {
             f.mkdirs();
@@ -106,7 +109,7 @@ public class SQLDatabaseHelper extends SQLiteOpenHelper {
         }
         try {
             SQLiteDatabase db = getReadableDatabase();
-            cursor = db.rawQuery("SELECT COUNT(*) as NumeroTablas FROM sqlite_master where type = 'table'", null);
+            cursor = db.rawQuery("SELECT COUNT(*) as NumeroTablas FROM sqlite_master where type = 'table' AND name <> 'android_metadata'", null);
             if (cursor != null && cursor.moveToFirst()) {
                 int count = cursor.getInt(0);
                 cursor.close();

@@ -7,15 +7,11 @@ package com.tismart.tsmlibrary.database.enums;
  */
 @SuppressWarnings("unused")
 public enum DatabaseEnum {
-    PROJECTION("Projection"), SELECTION("Selection"), SELECTIONARGS("SelectionArgs"), SORTORDER("SortOrder"), LIMIT("Limit"), DISTINCT("Distinct"), FLAG("Flag");
+    SELECTION("Selection"), SELECTIONARGS("SelectionArgs"), SORTORDER("SortOrder"), LIMIT("Limit"), DISTINCT("Distinct"), FLAG("Flag"), GROUPBY("GroupBy"), HAVING("Having");
 
-    final private String valor;
+    public String value;
 
-    DatabaseEnum(String valor) {
-        this.valor = valor;
-    }
-
-    public String getValor() {
-        return this.valor;
+    DatabaseEnum(String value) {
+        this.value = value;
     }
 }
