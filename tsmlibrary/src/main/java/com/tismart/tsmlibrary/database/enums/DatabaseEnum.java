@@ -9,7 +9,7 @@ package com.tismart.tsmlibrary.database.enums;
 public enum DatabaseEnum {
     SELECTION("Selection"), SELECTIONARGS("SelectionArgs"), SORTORDER("SortOrder"), LIMIT("Limit"), DISTINCT("Distinct"), FLAG("Flag"), GROUPBY("GroupBy"), HAVING("Having");
 
-    public String value;
+    public final String value;
 
     DatabaseEnum(String value) {
         this.value = value;

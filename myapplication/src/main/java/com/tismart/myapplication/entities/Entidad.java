@@ -5,6 +5,7 @@ import com.tismart.tsmlibrary.database.enums.TipoElemento;
 
 /**
  * Created by luis.burgos on 07/05/2015.
+ * 
  */
 @SuppressWarnings("unused")
 @com.tismart.tsmlibrary.database.annotations.Entidad

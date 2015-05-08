@@ -6,6 +6,7 @@ import com.tismart.tsmlibrary.database.DatabaseInstance;
 
 /**
  * Created by luis.burgos on 06/05/2015.
+ *
  */
 public class MyApplicationApplication extends Application {
 
@@ -15,8 +16,4 @@ public class MyApplicationApplication extends Application {
         DatabaseInstance.initialize(this, "MyApplication", "MyApplication.sqlite", 1, true);
     }
 
-    @Override
-    public void onTerminate() {
-        super.onTerminate();
-    }
 }
