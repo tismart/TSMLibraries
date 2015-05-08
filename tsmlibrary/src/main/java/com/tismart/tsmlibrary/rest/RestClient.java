@@ -34,17 +34,10 @@ public abstract class RestClient {
     private final static String HTTP_POST_CONTENTTYPE = "Content-type";
     private final static String APPLICATION_JSON = "application/json";
     private final static String CHARSET = "UTF-8";
-    private final AmbienteEnum ambienteEnum;
-    private final String DES_URL;
-    private final String QA_URL;
-    private final String PRD_URL;
-
-    public RestClient(AmbienteEnum ambienteEnum, String desUrl, String qaUrl, String prdUrl) {
-        this.ambienteEnum = ambienteEnum;
-        DES_URL = desUrl;
-        QA_URL = qaUrl;
-        PRD_URL = prdUrl;
-    }
+    protected AmbienteEnum ambienteEnum;
+    protected String DES_URL;
+    protected String QA_URL;
+    protected String PRD_URL;
 
     public void post(Context context, String service, String method, JSONObject request, RestCallback mCallback) throws NetworkException, IOException, JSONException {
         ResponseCode responseCode;
