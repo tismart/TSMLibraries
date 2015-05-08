@@ -190,6 +190,7 @@ public abstract class AbstractDAO<T> {
                     if (cursor != null && cursor.moveToFirst()) {
                         return cursor.getInt(0);
                     }
+                    return 1;
                 }
             }
         } catch (Exception ex) {

@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,6 +13,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
 
 /**
  * Created by Luis Miguel on 23/01/2015.
@@ -65,7 +67,12 @@ public class SQLDatabaseHelper extends SQLiteOpenHelper {
         InputStream myInput;
         byte[] buffer = new byte[1024];
         int length;
-        myInput = context.getAssets().open("MyApplication.sqlite");
+        try {
+            Log.d("TAG", Arrays.toString(context.getAssets().list(".")));
+        } catch (IOException e) {
+            Log.e("TAG", e.getLocalizedMessage(), e);
+        }
+        myInput = context.getAssets().open("db/MyApplication.sqlite");
         f = new File(DB_PATH);
         if (!f.exists()) {
             f.mkdirs();
