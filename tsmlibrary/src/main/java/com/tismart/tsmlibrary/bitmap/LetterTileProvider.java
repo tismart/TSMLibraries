@@ -67,7 +67,7 @@ public class LetterTileProvider {
 
     /**
      * @param word letras a mostrarse en la imagen
-     * @return Verdadero si <code>word</code> está dentro del alfabeto ingles, falso caso contrario
+     * @return Verdadero si <code>word</code> esta dentro del alfabeto ingles, falso caso contrario
      */
     private static boolean isEnglishLetterOrDigit(char[] word) {
         boolean noesletra = true;
