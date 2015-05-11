@@ -5,6 +5,7 @@ package com.tismart.tsmlibrary.rest.enums;
  * <p/>
  * Enum con los códigos de error comunes retornados por los servicios http.
  */
+@SuppressWarnings("WeakerAccess")
 public enum ResponseCode {
 
     HTTP_OK(200),
@@ -18,7 +19,7 @@ public enum ResponseCode {
     HTTP_ERROR_UNRECOGNIZED(0);
 
 
-    private final int code;
+    public final int code;
 
     ResponseCode(int code) {
         this.code = code;
@@ -31,9 +32,5 @@ public enum ResponseCode {
             }
         }
         return HTTP_ERROR_UNRECOGNIZED;
-    }
-
-    public int getCode() {
-        return this.code;
     }
 }

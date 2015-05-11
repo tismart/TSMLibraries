@@ -25,6 +25,7 @@ import java.net.URL;
  * Created by luis.burgos on 08/04/2015.
  * <p/>
  * Clase abstracta que implementa los métodos post y get a usarse en las aplicaciones.
+ * Se tienen que setear los valores de las variables DES_URL, QA_URL, PRD_URL y el ambienteEnum para poder obtener las rutas correctamente.
  */
 
 @SuppressWarnings({"unused", "WeakerAccess"})
@@ -39,9 +40,17 @@ public abstract class RestClient {
     protected String QA_URL;
     protected String PRD_URL;
 
-    public void post(Context context, String service, String method, JSONObject request, RestCallback mCallback) throws NetworkException, IOException, JSONException {
-        ResponseCode responseCode;
-        JSONObject jsonResult;
+    //region Synchronous Methods
+    public void postSync(Context context, String service, String method, JSONObject request, RestCallback mCallback) throws NetworkException, IOException, JSONException {
+        if (!ConnectionUtil.isNetworkAvailable(context)) {
+            throw new NetworkException(context.getString(R.string.tsmlibrary_error_conexion));
+        }
+        mCallback.OnStart();
+        WebServiceResponse serviceResponse = processPost(getUrl() + service + method, request);
+        mCallback.OnResponse(serviceResponse.responseCode, serviceResponse.response);
+    }
+
+    public void getSync(Context context, String service, String method, RestCallback mCallback) throws NetworkException, IOException, JSONException {
         if (!ConnectionUtil.isNetworkAvailable(context)) {
             throw new NetworkException(context.getString(R.string.tsmlibrary_error_conexion));
         }
@@ -49,6 +58,84 @@ public abstract class RestClient {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         try {
             mCallback.OnStart();
+            WebServiceResponse serviceResponse = processGet(getUrl() + service + method);
+            mCallback.OnResponse(serviceResponse.responseCode, serviceResponse.response);
+        } finally {
+            urlConnection.disconnect();
+        }
+    }
+
+    //endregion
+    //region Asynchronous Methods
+    public void postAsync(Context context, String service, String method, JSONObject request, final RestCallback mCallback) throws NetworkException {
+        if (!ConnectionUtil.isNetworkAvailable(context)) {
+            throw new NetworkException(context.getString(R.string.tsmlibrary_error_conexion));
+        }
+        new AsyncTask<String, Void, WebServiceResponse>() {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                mCallback.OnStart();
+            }
+
+            @Override
+            protected WebServiceResponse doInBackground(String... strings) {
+                WebServiceResponse wsservice = new WebServiceResponse();
+                try {
+                    wsservice = processPost(strings[0], new JSONObject(strings[1]));
+                } catch (IOException | JSONException ex) {
+                    ex.printStackTrace();
+                }
+                return wsservice;
+            }
+
+            @Override
+            protected void onPostExecute(WebServiceResponse response) {
+                mCallback.OnResponse(response.responseCode, response.response);
+            }
+        }.execute(getUrl() + service + method, request.toString());
+    }
+
+    public void getAsync(Context context, String service, String method, final RestCallback mCallback) throws NetworkException, IOException {
+        if (!ConnectionUtil.isNetworkAvailable(context)) {
+            throw new NetworkException(context.getString(R.string.tsmlibrary_error_conexion));
+        }
+        new AsyncTask<String, Void, WebServiceResponse>() {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                mCallback.OnStart();
+            }
+
+            @Override
+            protected WebServiceResponse doInBackground(String... strings) {
+                WebServiceResponse wsservice = new WebServiceResponse();
+                try {
+                    String url = strings[0];
+                    wsservice = processGet(url);
+                } catch (IOException | JSONException ex) {
+                    ex.printStackTrace();
+                }
+                return wsservice;
+            }
+
+            @Override
+            protected void onPostExecute(WebServiceResponse response) {
+                mCallback.OnResponse(response.responseCode, response.response);
+            }
+        }.execute(getUrl() + service + method);
+    }
+
+    //endregion
+    //region Process methods
+    private WebServiceResponse processPost(String str_url, JSONObject request) throws IOException, JSONException {
+        WebServiceResponse wsresponse = new WebServiceResponse();
+        URL url = new URL(str_url);
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        try {
+
             urlConnection.setDoOutput(true);
             urlConnection.setFixedLengthStreamingMode(request.length());
             urlConnection.setRequestProperty(HTTP_POST_CONTENTTYPE, APPLICATION_JSON);
@@ -56,143 +143,32 @@ public abstract class RestClient {
             out.write(request.toString());
             out.close();
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-            responseCode = ResponseCode.valueOf(urlConnection.getResponseCode());
-            if (responseCode.equals(ResponseCode.HTTP_OK)) {
-                jsonResult = new JSONObject(convertStreamToString(in));
-            } else {
-                jsonResult = new JSONObject();
+            wsresponse.responseCode = ResponseCode.valueOf(urlConnection.getResponseCode());
+            if (wsresponse.responseCode.equals(ResponseCode.HTTP_OK)) {
+                wsresponse.response = new JSONObject(convertStreamToString(in));
             }
-            mCallback.OnResponse(responseCode, jsonResult);
         } finally {
             urlConnection.disconnect();
         }
+        return wsresponse;
     }
 
-    public void postAsync(final Context context, final String service, final String method, final JSONObject request, final RestCallback mCallback) throws NetworkException, IOException {
-        if (!ConnectionUtil.isNetworkAvailable(context)) {
-            throw new NetworkException(context.getString(R.string.tsmlibrary_error_conexion));
-        }
-        URL url = new URL(getUrl() + service + method);
-        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-        new AsyncTask<HttpURLConnection, Void, String[]>() {
-
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                mCallback.OnStart();
-            }
-
-            @Override
-            protected String[] doInBackground(HttpURLConnection... urlConnections) {
-                ResponseCode responseCode = ResponseCode.HTTP_ERROR_UNRECOGNIZED;
-                JSONObject jsonResult = new JSONObject();
-                try {
-                    urlConnections[0].setDoOutput(true);
-                    urlConnections[0].setFixedLengthStreamingMode(request.length());
-                    urlConnections[0].setRequestProperty(HTTP_POST_CONTENTTYPE, APPLICATION_JSON);
-                    OutputStreamWriter out = new OutputStreamWriter(urlConnections[0].getOutputStream());
-                    out.write(request.toString());
-                    out.close();
-                    InputStream in = new BufferedInputStream(urlConnections[0].getInputStream());
-                    responseCode = ResponseCode.valueOf(urlConnections[0].getResponseCode());
-                    if (responseCode.equals(ResponseCode.HTTP_OK)) {
-                        jsonResult = new JSONObject(convertStreamToString(in));
-                    }
-                } catch (IOException | JSONException ex) {
-                    ex.printStackTrace();
-                } finally {
-                    urlConnections[0].disconnect();
-                }
-                return new String[]{jsonResult.toString(), responseCode.getCode() + ""};
-            }
-
-            @Override
-            protected void onPostExecute(String[] strings) {
-                JSONObject jsonResponse;
-                ResponseCode responseCode;
-                try {
-                    jsonResponse = new JSONObject(strings[0]);
-                    responseCode = ResponseCode.valueOf(Integer.parseInt(strings[1]));
-                } catch (JSONException jsonException) {
-                    jsonResponse = new JSONObject();
-                    responseCode = ResponseCode.HTTP_ERROR_UNRECOGNIZED;
-                }
-                mCallback.OnResponse(responseCode, jsonResponse);
-            }
-        }.execute(urlConnection);
-    }
-
-    public void get(Context context, String service, String method, RestCallback mCallback) throws NetworkException, IOException, JSONException {
-        ResponseCode responseCode;
-        JSONObject jsonResult;
-        if (!ConnectionUtil.isNetworkAvailable(context)) {
-            throw new NetworkException(context.getString(R.string.tsmlibrary_error_conexion));
-        }
-        URL url = new URL(getUrl() + service + method);
+    private WebServiceResponse processGet(String str_url) throws IOException, JSONException {
+        WebServiceResponse wsresponse = new WebServiceResponse();
+        URL url = new URL(str_url);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         try {
-            mCallback.OnStart();
+
             urlConnection.setRequestProperty(HTTP_POST_ACCEPT, APPLICATION_JSON);
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-            responseCode = ResponseCode.valueOf(urlConnection.getResponseCode());
-            if (responseCode.equals(ResponseCode.HTTP_OK)) {
-                jsonResult = new JSONObject(convertStreamToString(in));
-            } else {
-                jsonResult = new JSONObject();
+            wsresponse.responseCode = ResponseCode.valueOf(urlConnection.getResponseCode());
+            if (wsresponse.responseCode.equals(ResponseCode.HTTP_OK)) {
+                wsresponse.response = new JSONObject(convertStreamToString(in));
             }
-            mCallback.OnResponse(responseCode, jsonResult);
         } finally {
             urlConnection.disconnect();
         }
-    }
-
-    public void getAsync(final Context context, final String service, final String method, final RestCallback mCallback) throws NetworkException, IOException {
-        if (!ConnectionUtil.isNetworkAvailable(context)) {
-            throw new NetworkException(context.getString(R.string.tsmlibrary_error_conexion));
-        }
-        URL url = new URL(getUrl() + service + method);
-        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-        new AsyncTask<HttpURLConnection, Void, String[]>() {
-
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                mCallback.OnStart();
-            }
-
-            @Override
-            protected String[] doInBackground(HttpURLConnection... urlConnections) {
-                ResponseCode responseCode = ResponseCode.HTTP_ERROR_UNRECOGNIZED;
-                JSONObject jsonResult = new JSONObject();
-                try {
-                    urlConnections[0].setRequestProperty(HTTP_POST_CONTENTTYPE, APPLICATION_JSON);
-                    InputStream in = new BufferedInputStream(urlConnections[0].getInputStream());
-                    responseCode = ResponseCode.valueOf(urlConnections[0].getResponseCode());
-                    if (responseCode.equals(ResponseCode.HTTP_OK)) {
-                        jsonResult = new JSONObject(convertStreamToString(in));
-                    }
-                } catch (IOException | JSONException ex) {
-                    ex.printStackTrace();
-                } finally {
-                    urlConnections[0].disconnect();
-                }
-                return new String[]{jsonResult.toString(), responseCode.getCode() + ""};
-            }
-
-            @Override
-            protected void onPostExecute(String[] strings) {
-                JSONObject jsonResponse;
-                ResponseCode responseCode;
-                try {
-                    jsonResponse = new JSONObject(strings[0]);
-                    responseCode = ResponseCode.valueOf(Integer.parseInt(strings[1]));
-                } catch (JSONException jsonException) {
-                    jsonResponse = new JSONObject();
-                    responseCode = ResponseCode.HTTP_ERROR_UNRECOGNIZED;
-                }
-                mCallback.OnResponse(responseCode, jsonResponse);
-            }
-        }.execute(urlConnection);
+        return wsresponse;
     }
 
     private String getUrl() {
@@ -207,6 +183,7 @@ public abstract class RestClient {
                 return DES_URL;
         }
     }
+    //endregion
 
     private String convertStreamToString(InputStream is) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
@@ -227,5 +204,15 @@ public abstract class RestClient {
             }
         }
         return sb.toString();
+    }
+
+    private class WebServiceResponse {
+        ResponseCode responseCode;
+        JSONObject response;
+
+        public WebServiceResponse() {
+            responseCode = ResponseCode.HTTP_ERROR_UNRECOGNIZED;
+            response = new JSONObject();
+        }
     }
 }

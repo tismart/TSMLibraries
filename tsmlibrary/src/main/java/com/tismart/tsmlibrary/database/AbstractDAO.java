@@ -14,7 +14,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-@SuppressWarnings({"unused", "WeakerAccess"})
+@SuppressWarnings({"unused", "WeakerAccess", "UnusedReturnValue"})
 public abstract class AbstractDAO<T> {
 
     protected static HashMap<String, Integer> lstColumnIndex;
