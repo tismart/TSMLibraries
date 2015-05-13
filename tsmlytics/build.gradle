@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
-version = "1.0.0"
+version = "1.1.0"
 def siteUrl = 'https://github.com/tismart/TSMLibraries'
 def gitUrl = 'https://github.com/tismart/TSMLibraries.git'
 group = "com.tismart.libraries"
@@ -35,6 +35,7 @@ bintray {
     pkg {
         repo = "maven"
         name = "TSMLytics"
+        userOrg = "tismart"
         websiteUrl = siteUrl
         vcsUrl = gitUrl
         licenses = ["Apache-2.0"]
@@ -49,7 +50,7 @@ install {
             project {
                 packaging 'aar'
                 //noinspection GroovyAssignabilityCheck
-                name 'Libreria con clases helpers para el desarrollo de aplicaciones móviles'
+                name 'Libreria con clases helpers para el desarrollo de aplicaciones mï¿½viles'
                 url siteUrl
                 licenses {
                     license {

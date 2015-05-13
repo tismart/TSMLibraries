@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
-version = "1.0.2"
+version = "1.1.1"
 def siteUrl = 'https://github.com/tismart/TSMLibraries'
 def gitUrl = 'https://github.com/tismart/TSMLibraries.git'
 group = "com.tismart.libraries"
@@ -35,7 +35,8 @@ bintray {
     configurations = ['archives']
     pkg {
         repo = "maven"
-        name = "TSMLibrary"
+        name = "TSMLibrary-gildur88"
+        userOrg = "tismart"
         websiteUrl = siteUrl
         vcsUrl = gitUrl
         licenses = ["Apache-2.0"]
