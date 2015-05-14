@@ -3,10 +3,13 @@ package com.tismart.myapplication;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.TextView;
 
 import com.tismart.myapplication.daos.EntidadDAO;
 import com.tismart.myapplication.entities.Entidad;
+import com.tismart.tsmlibrary.rest.DatabaseDownloader;
+import com.tismart.tsmlibrary.rest.interfaces.DatabaseDownloadListener;
+import com.tismart.tsmlibrary.typefaces.TypefaceEnum;
+import com.tismart.tsmlibrary.views.CustomTextView;
 import com.tismart.tsmlytics.TSMLytics;
 import com.tismart.tsmlytics.enums.TSMLyticsEnum;
 
@@ -15,14 +18,15 @@ import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView tv;
+    private final String url_db = "http://qaelb-webmobile-2113058549.us-east-1.elb.amazonaws.com/FTPSite/FFVVMovil/SQLite/f64ced0ebb9d6922_SSO/GestionDeLets.sqlite";
+    private CustomTextView tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        tv = (TextView) findViewById(R.id.tv);
+        tv = (CustomTextView) findViewById(R.id.tv);
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -31,10 +35,14 @@ public class MainActivity extends AppCompatActivity {
                 Entidad entidad = new Entidad();
 
                 TSMLytics tsmLytics = new TSMLytics(MainActivity.this);
+
+                BOD_PSTCUtils bod_pstcUtils = new BOD_PSTCUtils(MainActivity.this);
+
                 HashMap<TSMLyticsEnum, String> hashTSMLytics = tsmLytics.getAll();
 
                 try {
                     tv.setText(tv.getText() + TSMLyticsEnum.AppsOpen.toString() + "\t:" + hashTSMLytics.get(TSMLyticsEnum.AppsOpen) + "\n");
+                    tv.setTypefaceUtils(bod_pstcUtils);
                     entidad.setAppsOpen(Integer.parseInt(hashTSMLytics.get(TSMLyticsEnum.AppsOpen), 0));
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -42,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
                 try {
                     tv.setText(tv.getText() + TSMLyticsEnum.AppsName.toString() + "\t:" + hashTSMLytics.get(TSMLyticsEnum.AppsName) + "\n");
+                    tv.setTypeface(bod_pstcUtils.getTypeface(TypefaceEnum.REGULAR));
                     entidad.setAppsName(hashTSMLytics.get(TSMLyticsEnum.AppsName));
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -49,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
                 try {
                     tv.setText(tv.getText() + TSMLyticsEnum.DeviceBattery.toString() + "\t:" + hashTSMLytics.get(TSMLyticsEnum.DeviceBattery) + "\n");
+                    tv.setTypeface(bod_pstcUtils.getTypeface(TypefaceEnum.REGULAR));
                     entidad.setDeviceBattery(Double.parseDouble(hashTSMLytics.get(TSMLyticsEnum.DeviceBattery)));
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -56,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
                 try {
                     tv.setText(tv.getText() + TSMLyticsEnum.DeviceType.toString() + "\t:" + hashTSMLytics.get(TSMLyticsEnum.DeviceType) + "\n");
+                    tv.setTypeface(bod_pstcUtils.getTypeface(TypefaceEnum.REGULAR));
                     entidad.setDeviceType(Boolean.parseBoolean(hashTSMLytics.get(TSMLyticsEnum.DeviceType)));
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -191,6 +202,28 @@ public class MainActivity extends AppCompatActivity {
                     ex.printStackTrace();
                 }
                 daoEntidad.listEntities(null);
+
+                DatabaseDownloader.execute(url_db, "ASI", "ASI.sqlite", new DatabaseDownloadListener() {
+                    @Override
+                    public void onStart() {
+
+                    }
+
+                    @Override
+                    public void publishProgress(double progress) {
+
+                    }
+
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError() {
+
+                    }
+                });
             }
         }, 2000);
 

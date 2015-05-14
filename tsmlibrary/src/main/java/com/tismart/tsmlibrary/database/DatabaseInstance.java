@@ -18,6 +18,7 @@ public class DatabaseInstance {
     private final String db_name;
     private final String app_name;
     private final int db_version;
+    public boolean existDatabase = false;
     private SQLiteDatabase db;
     private SQLDatabaseHelper dbHelper;
 
@@ -29,8 +30,11 @@ public class DatabaseInstance {
         this.db_version = db_version;
         try {
             dbHelper.createDatabase(fromAssets);
+            existDatabase = true;
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (DatabaseNotFoundException dnfe) {
+            existDatabase = false;
         }
     }
 
@@ -57,6 +61,7 @@ public class DatabaseInstance {
     }
 
     public boolean existsDatabase() {
-        return getDBHelper().existsDatabase();
+        existDatabase = getDBHelper().existsDatabase();
+        return existDatabase;
     }
 }

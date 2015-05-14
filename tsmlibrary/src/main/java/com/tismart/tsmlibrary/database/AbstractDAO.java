@@ -18,7 +18,7 @@ import java.util.HashMap;
 public abstract class AbstractDAO<T> {
 
     protected static HashMap<String, Integer> lstColumnIndex;
-    static private ArrayList<Field> lstPrimaryFields;
+    private static ArrayList<Field> lstPrimaryFields;
     private static HashMap<Field, Elemento> lstFieldElemento;
     final private String tableName;
     final private Class<T> clase;
@@ -38,6 +38,7 @@ public abstract class AbstractDAO<T> {
     private void inicializeFieldElement() {
         if (lstFieldElemento == null) {
             lstFieldElemento = new HashMap<>();
+
             for (Field f : clase.getDeclaredFields()) {
                 f.setAccessible(true);
                 if (f.isAnnotationPresent(Elemento.class)) {
@@ -238,6 +239,24 @@ public abstract class AbstractDAO<T> {
             }
         }
         return lst;
+    }
+
+    public ArrayList<T> listEntitiesFromCursor(Cursor cursor) {
+        ArrayList<T> lst = new ArrayList<>();
+        try {
+            do {
+                lst.add(transformCursorToEntity(cursor));
+            } while (cursor.moveToNext());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            cursor.close();
+        }
+        return lst;
+    }
+
+    public T getEntityFromCursor(Cursor cursor) {
+        return transformCursorToEntity(cursor);
     }
 
     public T getEntity(Bundle args) {

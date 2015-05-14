@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
-import android.util.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,7 +12,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Arrays;
 
 /**
  * Created by Luis Miguel on 23/01/2015.
@@ -49,16 +47,13 @@ public class SQLDatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public void createDatabase(boolean fromAssets) throws IOException {
+    public void createDatabase(boolean fromAssets) throws IOException, DatabaseNotFoundException {
         if (!existsDatabase()) {
             if (fromAssets) {
                 copyDatabaseFromAssets();
             } else {
                 copyDatabase();
             }
-        }
-        if (!existsDatabase()) {
-            createDatabase(fromAssets);
         }
     }
 
@@ -67,12 +62,7 @@ public class SQLDatabaseHelper extends SQLiteOpenHelper {
         InputStream myInput;
         byte[] buffer = new byte[1024];
         int length;
-        try {
-            Log.d("TAG", Arrays.toString(context.getAssets().list(".")));
-        } catch (IOException e) {
-            Log.e("TAG", e.getLocalizedMessage(), e);
-        }
-        myInput = context.getAssets().open("db/MyApplication.sqlite");
+        myInput = context.getAssets().open(DB_NAME);
         f = new File(DB_PATH);
         if (!f.exists()) {
             f.mkdirs();
@@ -86,11 +76,15 @@ public class SQLDatabaseHelper extends SQLiteOpenHelper {
         myInput.close();
     }
 
-    private void copyDatabase() throws IOException {
+    private void copyDatabase() throws IOException, DatabaseNotFoundException {
         File f;
         InputStream myInput;
         byte[] buffer = new byte[1024];
         int length;
+        f = new File(getDownloadDBFile());
+        if (!f.exists()) {
+            throw new DatabaseNotFoundException();
+        }
         myInput = new FileInputStream(getDownloadDBFile());
         f = new File(DB_PATH);
         if (!f.exists()) {
@@ -99,6 +93,10 @@ public class SQLDatabaseHelper extends SQLiteOpenHelper {
         OutputStream myOutput = new FileOutputStream(DB_PATH + DB_NAME);
         while ((length = myInput.read(buffer)) > 0) {
             myOutput.write(buffer, 0, length);
+        }
+        f = new File(getDownloadDBFile());
+        if (f.exists()) {
+            f.delete();
         }
         myOutput.flush();
         myOutput.close();

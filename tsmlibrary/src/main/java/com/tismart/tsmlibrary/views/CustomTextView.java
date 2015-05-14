@@ -18,6 +18,7 @@ import com.tismart.tsmlibrary.typefaces.TypefaceUtils;
 public class CustomTextView extends TextView {
 
     private TypefaceUtils mTypefaceUtils = null;
+    private int fontValue = 0;
 
     public CustomTextView(Context context) {
         super(context);
@@ -26,8 +27,8 @@ public class CustomTextView extends TextView {
     public CustomTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
         if (!isInEditMode()) {
-            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.tsmlibrary_custom_view);
-            final int fontValue = a.getInt(R.styleable.tsmlibrary_custom_view_tsmlibrary_typeface, 0);
+            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.custom_view);
+            fontValue = a.getInt(R.styleable.custom_view_typeface, 0);
             a.recycle();
             if (mTypefaceUtils == null) {
                 mTypefaceUtils = RobotoTypefaceUtils.newInstance(context);
@@ -39,8 +40,8 @@ public class CustomTextView extends TextView {
     public CustomTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         if (!isInEditMode()) {
-            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.tsmlibrary_custom_view);
-            final int fontValue = a.getInt(R.styleable.tsmlibrary_custom_view_tsmlibrary_typeface, 0);
+            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.custom_view);
+            fontValue = a.getInt(R.styleable.custom_view_typeface, 0);
             a.recycle();
             if (mTypefaceUtils == null) {
                 mTypefaceUtils = RobotoTypefaceUtils.newInstance(context);
@@ -51,5 +52,6 @@ public class CustomTextView extends TextView {
 
     public void setTypefaceUtils(TypefaceUtils typefaceUtils) {
         this.mTypefaceUtils = typefaceUtils;
+        setTypeface(mTypefaceUtils.getTypeface(fontValue));
     }
 }

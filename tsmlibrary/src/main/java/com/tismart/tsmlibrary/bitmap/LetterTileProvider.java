@@ -23,16 +23,16 @@ import com.tismart.tsmlibrary.R;
 public class LetterTileProvider {
 
     private static LetterTileProvider provider;
+    final char[] mFirstChar;
     private final TextPaint mPaint = new TextPaint();
     private final Rect mBounds = new Rect();
     private final Canvas mCanvas = new Canvas();
     private final int mTileLetterFontSize;
     private final Bitmap mDefaultBitmap;
-    char[] mFirstChar;
+    private final Context context;
+    private final int letrasAMostrarse;
     private int num_tile_colors;
     private TypedArray mColors;
-    private Context context;
-    private int letrasAMostrarse;
 
     /**
      * Constructor for <code>LetterTileProvider</code>
