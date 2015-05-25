@@ -20,14 +20,13 @@ import java.util.HashMap;
  */
 public class TSMLytics {
 
-    //ScreenSize, ScreenDensity, ScreenOrientation, MemoryRAMFree, MemoryRAMUsed, DiskHDFree, DiskHDUsed, DiskHDTotal, DiskSDFree, DiskSDUsed, DiskSDTotal, AppsOpen, AppsName, NetworkConnection, NetworkType, NetworkStrength, OSVersion, OSName, DeviceBatery, DeviceType, DeviceModel, DeviceID, DeviceRooted
-
     private final Context mContext;
 
     public TSMLytics(Context mContext) {
         this.mContext = mContext;
     }
 
+    @Deprecated
     public HashMap<TSMLyticsEnum, String> getAll() {
         HashMap<TSMLyticsEnum, String> hashTSMLytics = new HashMap<>();
         try {
@@ -168,6 +167,54 @@ public class TSMLytics {
 
         try {
             hashTSMLytics.put(TSMLyticsEnum.OSVersion, OSInfo.getOSVersion());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return hashTSMLytics;
+    }
+
+    public HashMap<TSMLyticsEnum, Object> getAllWithEntities() {
+        HashMap<TSMLyticsEnum, Object> hashTSMLytics = new HashMap<>();
+
+        try {
+            hashTSMLytics.put(TSMLyticsEnum.AppInfo, AppInfo.getAppInfo(mContext));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        try {
+            hashTSMLytics.put(TSMLyticsEnum.DeviceInfo, DeviceInfo.getDeviceInfo(mContext));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        try {
+            hashTSMLytics.put(TSMLyticsEnum.DiskInfo, DiskInfo.getDiskInfo());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        try {
+            hashTSMLytics.put(TSMLyticsEnum.MemoryInfo, MemoryInfo.getMemoryInfo(mContext));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        try {
+            hashTSMLytics.put(TSMLyticsEnum.NetworkInfo, NetworkInfo.getNetworkInfo(mContext));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        try {
+            hashTSMLytics.put(TSMLyticsEnum.OSInfo, OSInfo.getOSInfo());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        try {
+            hashTSMLytics.put(TSMLyticsEnum.ScreenInfo, ScreenInfo.getScreenInfo(mContext));
         } catch (Exception ex) {
             ex.printStackTrace();
         }

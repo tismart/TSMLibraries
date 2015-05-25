@@ -8,6 +8,7 @@ import android.os.Build;
 import android.provider.Settings;
 
 import com.tismart.tsmlytics.R;
+import com.tismart.tsmlytics.entities.Device;
 import com.tismart.tsmlytics.utils.StringUtils;
 
 import java.io.BufferedReader;
@@ -16,12 +17,59 @@ import java.io.InputStreamReader;
 
 /**
  * Created by luis.rios on 29/04/2015.
- *
  */
 public class DeviceInfo {
 
-    //ScreenSize, ScreenDensity, ScreenOrientation, MemoryRAMFree, MemoryRAMUsed, MemoryRAMTotal, DiskHDFree, DiskHDUsed, DiskHDTotal, DiskSDFree, DiskSDUsed, DiskSDTotal, AppsOpen, AppsName, NetworkConnection, NetworkType, NetworkStrength, OSVersion, OSName, DeviceBattery, DeviceType, DeviceModel, DeviceID, DeviceRooted
+    public static Device getDeviceInfo(Context mContext) {
+        Device device = new Device();
 
+        try {
+            Intent batteryIntent = mContext.registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+            int level = batteryIntent != null ? batteryIntent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1) : 0;
+            int scale = batteryIntent != null ? batteryIntent.getIntExtra(BatteryManager.EXTRA_SCALE, -1) : 0;
+
+            if (level == -1 || scale == -1) {
+                device.setBattery(0.0f);
+            } else
+                device.setBattery(((float) level / (float) scale) * 100.0f);
+        } catch (Exception ex) {
+            device.setBattery(0.0f);
+        }
+
+        try {
+            device.setIsTablet(mContext.getResources().getBoolean(R.bool.isTablet));
+        } catch (Exception ex) {
+            device.setIsTablet(false);
+        }
+
+        try {
+            String sModel;
+            if (Build.MODEL.startsWith(Build.MANUFACTURER)) {
+                sModel = Build.MODEL + " (" + Build.BOARD + ")";
+            } else {
+                sModel = Build.MANUFACTURER + " " + Build.MODEL + " (" + Build.BOARD + ")";
+            }
+            device.setModel(StringUtils.capitalize(sModel));
+        } catch (Exception ex) {
+            device.setModel(null);
+        }
+
+        try {
+            device.setID(Settings.Secure.getString(mContext.getContentResolver(), Settings.Secure.ANDROID_ID));
+        } catch (Exception ex) {
+            device.setID(null);
+        }
+
+        try {
+            device.setIsRooted(checkRootMethod1() || checkRootMethod2() || checkRootMethod3() || checkRootMethod4());
+        } catch (Exception ex) {
+            device.setIsRooted(false);
+        }
+
+        return device;
+    }
+
+    @Deprecated
     public static String getDeviceBattery(Context mContext) {
         try {
             Intent batteryIntent = mContext.registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
@@ -39,6 +87,7 @@ public class DeviceInfo {
 
     }
 
+    @Deprecated
     public static String getDeviceType(Context mContext) {
         try {
             if (mContext.getResources().getBoolean(R.bool.isTablet))
@@ -50,6 +99,7 @@ public class DeviceInfo {
         }
     }
 
+    @Deprecated
     public static String getDeviceModel() {
         try {
             String sModel;
@@ -64,6 +114,7 @@ public class DeviceInfo {
         }
     }
 
+    @Deprecated
     public static String getDeviceID(Context mContext) {
         try {
             return Settings.Secure.getString(mContext.getContentResolver(), Settings.Secure.ANDROID_ID);
@@ -72,6 +123,7 @@ public class DeviceInfo {
         }
     }
 
+    @Deprecated
     public static String getDeviceRooted() {
         return (checkRootMethod1() || checkRootMethod2() || checkRootMethod3() || checkRootMethod4()) + "";
     }
