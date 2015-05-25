@@ -5,18 +5,46 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 
+import com.tismart.tsmlytics.entities.App;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by luis.rios on 29/04/2015.
- *
- *
  */
 public class AppInfo {
 
-    //ScreenSize, ScreenDensity, ScreenOrientation, MemoryRAMFree, MemoryRAMUsed, MemoryRAMTotal, DiskHDFree, DiskHDUsed, DiskHDTotal, DiskSDFree, DiskSDUsed, DiskSDTotal, AppsOpen, AppsName, NetworkConnection, NetworkType, NetworkStrength, OSVersion, OSName, DeviceBattery, DeviceType, DeviceModel, DeviceID, DeviceRooted
+    public static ArrayList<App> getAppInfo(Context mContext) {
+        ArrayList<App> mLstApp = null;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            mLstApp = new ArrayList<>();
+            App app = null;
+            try {
+                ActivityManager activityManager = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
+                List<ActivityManager.RunningTaskInfo> tasks = activityManager.getRunningTasks(Integer.MAX_VALUE);
+                PackageManager packageManager = mContext.getPackageManager();
 
-    @SuppressWarnings("deprecation")
+                for (int i = 0; i < tasks.size(); i++) {
+                    try {
+                        app = new App();
+                        app.setName(packageManager.getApplicationLabel(packageManager.getApplicationInfo(tasks.get(i).baseActivity.getPackageName(), 0)).toString());
+                        app.setIcon(packageManager.getApplicationIcon(packageManager.getApplicationInfo(tasks.get(i).baseActivity.getPackageName(), 0)));
+                        app.setPackage(tasks.get(i).baseActivity.getPackageName());
+                        mLstApp.add(app);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            } catch (Exception ex) {
+            }
+        } else
+            mLstApp = null;
+
+        return mLstApp;
+    }
+
+    @Deprecated
     public static String getAppsOpenNumber(Context mContext) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             try {
@@ -30,7 +58,7 @@ public class AppInfo {
             return "";
     }
 
-    @SuppressWarnings("deprecation")
+    @Deprecated
     public static String getAppsOpenName(Context mContext) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             try {

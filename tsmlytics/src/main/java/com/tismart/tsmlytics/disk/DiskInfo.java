@@ -4,18 +4,64 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
 
+import com.tismart.tsmlytics.entities.Disk;
+
 import java.io.File;
 
 /**
  * Created by luis.rios on 29/04/2015.
- *
- *
  */
 public class DiskInfo {
 
-    //ScreenSize, ScreenDensity, ScreenOrientation, MemoryRAMFree, MemoryRAMUsed, MemoryRAMTotal, DiskHDFree, DiskHDUsed, DiskHDTotal, DiskSDFree, DiskSDUsed, DiskSDTotal, AppsOpen, AppsName, NetworkConnection, NetworkType, NetworkStrength, OSVersion, OSName, DeviceBattery, DeviceType, DeviceModel, DeviceID, DeviceRooted
+    public static Disk getDiskInfo() {
+        Disk disk = null;
+        long blockSizeInternal = 0L, availableBlocksInternal = 0L, totalBlocksInternal = 0L, blockSizeExternal = 0L, availableBlocksExternal = 0L, totalBlocksExternal = 0L;
 
-    @SuppressWarnings("deprecation")
+        try {
+            disk = new Disk();
+            StatFs stat = new StatFs(Environment.getDataDirectory().getPath());
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                blockSizeInternal = stat.getBlockSize();
+                availableBlocksInternal = stat.getAvailableBlocks();
+                totalBlocksInternal = stat.getBlockCount();
+            } else {
+                blockSizeInternal = stat.getBlockSizeLong();
+                availableBlocksInternal = stat.getAvailableBlocksLong();
+                totalBlocksInternal = stat.getBlockCountLong();
+            }
+
+            if (externalMemoryAvailable()) {
+                stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                    blockSizeExternal = stat.getBlockSize();
+                    availableBlocksExternal = stat.getAvailableBlocks();
+                    totalBlocksExternal = stat.getBlockCount();
+                } else {
+                    blockSizeExternal = stat.getBlockSizeLong();
+                    availableBlocksExternal = stat.getAvailableBlocksLong();
+                    totalBlocksExternal = stat.getBlockCountLong();
+                }
+            } else {
+                availableBlocksExternal = 0L;
+                blockSizeExternal = 0L;
+                totalBlocksExternal = 0L;
+            }
+
+            disk.setInternalFree(availableBlocksInternal * blockSizeInternal);
+            disk.setInternalUsed((totalBlocksInternal - availableBlocksInternal) * blockSizeInternal);
+            disk.setInternalTotal(totalBlocksInternal * blockSizeInternal);
+            disk.setExternalFree(availableBlocksExternal * blockSizeExternal);
+            disk.setExternalUsed((totalBlocksExternal - availableBlocksExternal) * blockSizeExternal);
+            disk.setExternalTotal(totalBlocksExternal * blockSizeExternal);
+
+        } catch (Exception ex) {
+            disk = null;
+        }
+
+        return disk;
+    }
+
+    @Deprecated
     public static String getDiskHDFree() {
         File path = Environment.getDataDirectory();
         StatFs stat = new StatFs(path.getPath());
@@ -32,7 +78,7 @@ public class DiskInfo {
         return formateDisk(blockSize * availableBlocks);
     }
 
-    @SuppressWarnings("deprecation")
+    @Deprecated
     public static String getDiskHDUsed() {
         File path = Environment.getDataDirectory();
         StatFs stat = new StatFs(path.getPath());
@@ -52,7 +98,7 @@ public class DiskInfo {
         return formateDisk((blockSize * totalBlocks) - (blockSize * availableBlocks));
     }
 
-    @SuppressWarnings("deprecation")
+    @Deprecated
     public static String getDiskHDTotal() {
         File path = Environment.getDataDirectory();
         StatFs stat = new StatFs(path.getPath());
@@ -69,7 +115,7 @@ public class DiskInfo {
         return formateDisk(blockSize * totalBlocks);
     }
 
-    @SuppressWarnings("deprecation")
+    @Deprecated
     public static String getDiskSDFree() {
         if (externalMemoryAvailable()) {
             File path = Environment.getExternalStorageDirectory();
@@ -89,7 +135,7 @@ public class DiskInfo {
             return "";
     }
 
-    @SuppressWarnings("deprecation")
+    @Deprecated
     public static String getDiskSDUsed() {
         if (externalMemoryAvailable()) {
             File path = Environment.getExternalStorageDirectory();
@@ -112,7 +158,7 @@ public class DiskInfo {
             return "";
     }
 
-    @SuppressWarnings("deprecation")
+    @Deprecated
     public static String getDiskSDTotal() {
         if (externalMemoryAvailable()) {
             File path = Environment.getExternalStorageDirectory();
