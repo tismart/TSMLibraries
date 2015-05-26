@@ -5,7 +5,7 @@ import android.graphics.Typeface;
 
 /**
  * Created by luis.burgos on 20/03/2015.
- * <p/>
+ *
  * Clase padre para generación de typeface customizados. Se puede usar la clase @RobotoTypefaceUtils o crear una nueva usando esta clase padre.
  */
 @SuppressWarnings("SameParameterValue,unused")

@@ -2,7 +2,7 @@ package com.tismart.tsmlibrary.typefaces;
 
 /**
  * Created by luis.burgos on 20/03/2015.
- * <p/>
+ *
  * Enum con los distintos tipos de typeface.
  */
 public enum TypefaceEnum {

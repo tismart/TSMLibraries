@@ -7,7 +7,7 @@ import java.io.IOException;
 
 /**
  * Created by Luis Miguel on 23/01/2015.
- * <p/>
+ *
  * Clase que usa el patrón singleton para instanciar el helper que comunica la aplicación con la bd.
  */
 

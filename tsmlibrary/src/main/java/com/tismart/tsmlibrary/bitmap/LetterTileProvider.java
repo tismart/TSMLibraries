@@ -16,7 +16,7 @@ import com.tismart.tsmlibrary.R;
 
 /**
  * Created by luis.burgos on 29/01/2015.
- * <p/>
+ *
  * Clase que genera una palabra con un fondo de un color.
  */
 @SuppressWarnings("unused")
@@ -38,6 +38,7 @@ public class LetterTileProvider {
      * Constructor for <code>LetterTileProvider</code>
      *
      * @param context The {@link Context} to use
+     * @param letrasAMostrarse cantidad de lestras a mostrarse
      */
     public LetterTileProvider(Context context, int letrasAMostrarse) {
         this.context = context;

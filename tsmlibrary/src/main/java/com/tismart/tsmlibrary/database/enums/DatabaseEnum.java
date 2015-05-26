@@ -2,7 +2,7 @@ package com.tismart.tsmlibrary.database.enums;
 
 /**
  * Created by Luis Miguel on 23/01/2015.
- * <p/>
+ *
  * Enum para los componentes genericos usados en toda consulta o transacción en bd.
  */
 @SuppressWarnings("unused")

@@ -7,7 +7,7 @@ import android.text.style.TypefaceSpan;
 
 /**
  * Created by luis.burgos on 23/03/2015.
- * <p/>
+ *
  * Clase TypefaceSpan customizada para los diferentes tipos de typeface que se puede setear a un span.
  */
 @SuppressWarnings("NullableProblems,unused")

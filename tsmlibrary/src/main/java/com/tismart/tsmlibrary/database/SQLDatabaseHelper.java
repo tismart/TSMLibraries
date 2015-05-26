@@ -15,7 +15,7 @@ import java.io.OutputStream;
 
 /**
  * Created by Luis Miguel on 23/01/2015.
- * <p/>
+ *
  * Clase abstracta que permite generar una base de datos y cuenta con la opción de generar una bd desde Assets o desde una descarga vía web.
  */
 @SuppressWarnings("ResultOfMethodCallIgnored")

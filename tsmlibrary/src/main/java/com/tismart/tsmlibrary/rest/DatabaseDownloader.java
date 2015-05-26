@@ -15,7 +15,7 @@ import java.net.URL;
 
 /**
  * Created by luis.burgos on 14/05/2015.
- * <p/>
+ *
  * Clase utilitaria que maneja la descarga inicial de una base de datos.
  */
 @SuppressWarnings({"unused", "ResultOfMethodCallIgnored"})

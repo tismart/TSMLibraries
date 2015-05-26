@@ -6,7 +6,7 @@ import android.net.NetworkInfo;
 
 /**
  * Created by luis.burgos on 08/04/2015.
- * <p/>
+ *
  * Clase con metodos auxiliares relacionados con la conexión a internet.
  */
 @SuppressWarnings({"BooleanMethodIsAlwaysInverted", "WeakerAccess"})

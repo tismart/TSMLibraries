@@ -4,7 +4,7 @@ import android.content.Context;
 
 /**
  * Created by luis.burgos on 20/03/2015.
- * <p/>
+ *
  * Clase de typeface especial para Roboto.
  */
 public class RobotoTypefaceUtils extends TypefaceUtils {

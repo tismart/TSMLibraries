@@ -15,7 +15,7 @@ import android.widget.ImageView;
 
 /**
  * Created by Luis Miguel on 22/01/2015.
- * <p/>
+ *
  * Image view customizado que redondea la imagen de acuerdo a los xmls.
  */
 @SuppressWarnings({"NullableProblems", "unused", "WeakerAccess"})

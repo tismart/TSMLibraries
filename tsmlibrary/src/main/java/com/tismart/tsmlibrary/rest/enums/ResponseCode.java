@@ -2,7 +2,7 @@ package com.tismart.tsmlibrary.rest.enums;
 
 /**
  * Created by luis.burgos on 08/04/2015.
- * <p/>
+ *
  * Enum con los códigos de error comunes retornados por los servicios http.
  */
 @SuppressWarnings("WeakerAccess")
