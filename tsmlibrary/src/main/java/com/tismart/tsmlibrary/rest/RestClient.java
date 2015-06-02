@@ -138,9 +138,8 @@ public abstract class RestClient {
         URL url = new URL(str_url);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         try {
-
+            urlConnection.setConnectTimeout(60000);
             urlConnection.setDoOutput(true);
-            urlConnection.setFixedLengthStreamingMode(request.length());
             urlConnection.setRequestProperty(HTTP_POST_CONTENTTYPE, APPLICATION_JSON);
             OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
             out.write(request.toString());
@@ -162,7 +161,7 @@ public abstract class RestClient {
         URL url = new URL(str_url);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         try {
-
+            urlConnection.setConnectTimeout(60000);
             urlConnection.setRequestProperty(HTTP_POST_ACCEPT, APPLICATION_JSON);
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
             wsresponse.responseCode = ResponseCode.valueOf(urlConnection.getResponseCode());
