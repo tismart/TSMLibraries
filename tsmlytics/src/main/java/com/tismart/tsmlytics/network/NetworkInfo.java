@@ -135,6 +135,7 @@ public class NetworkInfo {
                         case ConnectivityManager.TYPE_WIFI:
                             WifiInfo wifiInfo = ((WifiManager) mContext.getSystemService(Context.WIFI_SERVICE)).getConnectionInfo();
                             network.setStrength(String.valueOf(wifiInfo.getRssi()));
+                            break;
                         case ConnectivityManager.TYPE_MOBILE:
                         case ConnectivityManager.TYPE_MOBILE_DUN:
                         case ConnectivityManager.TYPE_MOBILE_HIPRI:
@@ -144,6 +145,7 @@ public class NetworkInfo {
                             telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
                             telephonyManager.listen(null, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
                             network.setStrength(String.valueOf((CustomPhoneStateListener.iSignalStrength * 2) - 113));
+                            break;
                         default:
                             network.setStrength("");
                     }
