@@ -14,17 +14,15 @@ import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView tv;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        tv = (TextView) findViewById(R.id.tv);
+        TextView tv = (TextView) findViewById(R.id.tv);
 
         HashMap<TSMLyticsEnum, Object> hashTSMLytics = new TSMLytics(MainActivity.this).getAllWithEntities();
-        ArrayList<App> mLstApp = (ArrayList<App>) hashTSMLytics.get(TSMLyticsEnum.AppInfo);
+        @SuppressWarnings("unchecked") ArrayList<App> mLstApp = (ArrayList<App>) hashTSMLytics.get(TSMLyticsEnum.AppInfo);
 
         tv.setText("Numero " + mLstApp.size() + "\n");
         for (int i = 0; i < mLstApp.size(); i++)

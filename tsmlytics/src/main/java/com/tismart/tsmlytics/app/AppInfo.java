@@ -13,13 +13,14 @@ import java.util.List;
 /**
  * Created by luis.rios on 29/04/2015.
  */
+@SuppressWarnings("deprecation")
 public class AppInfo {
 
     public static ArrayList<App> getAppInfo(Context mContext) {
-        ArrayList<App> mLstApp = null;
+        ArrayList<App> mLstApp;
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             mLstApp = new ArrayList<>();
-            App app = null;
+            App app;
             try {
                 ActivityManager activityManager = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
                 List<ActivityManager.RunningTaskInfo> tasks = activityManager.getRunningTasks(Integer.MAX_VALUE);
@@ -37,6 +38,7 @@ public class AppInfo {
                     }
                 }
             } catch (Exception ex) {
+                ex.printStackTrace();
             }
         } else
             mLstApp = null;

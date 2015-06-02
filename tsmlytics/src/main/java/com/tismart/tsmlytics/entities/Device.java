@@ -6,6 +6,7 @@ import android.os.Parcelable;
 /**
  * Created by luis.rios on 21/05/2015.
  */
+@SuppressWarnings("WeakerAccess")
 public class Device implements Parcelable {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<Device> CREATOR = new Parcelable.Creator<Device>() {

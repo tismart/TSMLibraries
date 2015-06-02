@@ -11,7 +11,7 @@ import java.io.IOException;
  * Clase que usa el patrón singleton para instanciar el helper que comunica la aplicación con la bd.
  */
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "SameParameterValue"})
 public class DatabaseInstance {
     private static DatabaseInstance ourInstance = null;
     final private Context context;
