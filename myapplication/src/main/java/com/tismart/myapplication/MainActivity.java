@@ -1,5 +1,7 @@
 package com.tismart.myapplication;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
@@ -8,9 +10,9 @@ import com.tismart.tsmlibrary.rest.RestClient;
 import com.tismart.tsmlibrary.rest.enums.AmbienteEnum;
 import com.tismart.tsmlibrary.rest.enums.ResponseCode;
 import com.tismart.tsmlibrary.rest.interfaces.RestCallback;
+import com.tismart.tsmlytics.entities.Network;
 
 import org.json.JSONObject;
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,6 +25,9 @@ public class MainActivity extends AppCompatActivity {
 
         /*HashMap<TSMLyticsEnum, Object> hashTSMLytics = new TSMLytics(MainActivity.this).getAllWithEntities();
         @SuppressWarnings("unchecked") ArrayList<App> mLstApp = (ArrayList<App>) hashTSMLytics.get(TSMLyticsEnum.AppInfo);
+//        HashMap<TSMLyticsEnum, Object> hashTSMLytics = new TSMLytics(MainActivity.this).getAllWithEntities();
+//        Network network = (Network) hashTSMLytics.get(TSMLyticsEnum.NetworkInfo);
+        Network network = null;
 
         tv.setText("Numero " + mLstApp.size() + "\n");
         for (int i = 0; i < mLstApp.size(); i++)
@@ -53,6 +58,13 @@ public class MainActivity extends AppCompatActivity {
         WebServiceRestClient() {
             DES_URL = "http://192.168.1.171:1991/EsikaRestSlim/index.php/pack_product";
             ambienteEnum = AmbienteEnum.DESARROLLO;
+        }
+        android.net.NetworkInfo networkInfo = ((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
+        if (networkInfo == null)
+            network = null;
+        else {
+
+            tv.setText("Numero " + networkInfo.getType() + "\n" + networkInfo.getSubtype());
         }
     }
 }
