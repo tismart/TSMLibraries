@@ -10,7 +10,6 @@ import com.tismart.tsmlibrary.rest.RestClient;
 import com.tismart.tsmlibrary.rest.enums.AmbienteEnum;
 import com.tismart.tsmlibrary.rest.enums.ResponseCode;
 import com.tismart.tsmlibrary.rest.interfaces.RestCallback;
-import com.tismart.tsmlytics.entities.Network;
 
 import org.json.JSONObject;
 
@@ -23,15 +22,6 @@ public class MainActivity extends AppCompatActivity {
 
         TextView tv = (TextView) findViewById(R.id.tv);
 
-        /*HashMap<TSMLyticsEnum, Object> hashTSMLytics = new TSMLytics(MainActivity.this).getAllWithEntities();
-        @SuppressWarnings("unchecked") ArrayList<App> mLstApp = (ArrayList<App>) hashTSMLytics.get(TSMLyticsEnum.AppInfo);
-//        HashMap<TSMLyticsEnum, Object> hashTSMLytics = new TSMLytics(MainActivity.this).getAllWithEntities();
-//        Network network = (Network) hashTSMLytics.get(TSMLyticsEnum.NetworkInfo);
-        Network network = null;
-
-        tv.setText("Numero " + mLstApp.size() + "\n");
-        for (int i = 0; i < mLstApp.size(); i++)
-            tv.setText(tv.getText() + mLstApp.get(i).getName() + " " + mLstApp.get(i).getPackage() + "\n");*/
         try {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("color1", "182910");
@@ -55,16 +45,11 @@ public class MainActivity extends AppCompatActivity {
 
     private class WebServiceRestClient extends RestClient {
 
+        android.net.NetworkInfo networkInfo = ((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
+
         WebServiceRestClient() {
             DES_URL = "http://192.168.1.171:1991/EsikaRestSlim/index.php/pack_product";
             ambienteEnum = AmbienteEnum.DESARROLLO;
-        }
-        android.net.NetworkInfo networkInfo = ((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
-        if (networkInfo == null)
-            network = null;
-        else {
-
-            tv.setText("Numero " + networkInfo.getType() + "\n" + networkInfo.getSubtype());
         }
     }
 }
