@@ -126,6 +126,7 @@ public class NetworkInfo {
                                     network.setType("");
                                     break;
                             }
+                            break;
                         default:
                             network.setType("");
                             break;
