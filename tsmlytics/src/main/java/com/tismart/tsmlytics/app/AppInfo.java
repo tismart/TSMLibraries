@@ -15,6 +15,16 @@ import java.util.List;
  */
 public class AppInfo {
 
+    /**
+     * Obtiene las aplicaciones abiertas actuales en el dispositivo.
+     * Si la versión de Android es mayor o igual al API 21 este método devolverá null
+     * Si la versión de Android es menor al API 21 este método te devolverá una lista del tipo App
+     * App.Name nombre de la aplicación en String
+     * App.Icon ícono de la aplicación en Drawable
+     * App.Package nombre del paquete de la aplicación en String
+     * @param mContext contexto de la aplicación
+     * @return
+     */
     public static ArrayList<App> getAppInfo(Context mContext) {
         ArrayList<App> mLstApp = null;
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {

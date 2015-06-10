@@ -6,7 +6,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
+import com.tismart.tsmlytics.TSMLytics;
 import com.tismart.tsmlytics.entities.Network;
+import com.tismart.tsmlytics.enums.TSMLyticsEnum;
+
+import java.util.HashMap;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -20,16 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
         tv = (TextView) findViewById(R.id.tv);
 
-//        HashMap<TSMLyticsEnum, Object> hashTSMLytics = new TSMLytics(MainActivity.this).getAllWithEntities();
-//        Network network = (Network) hashTSMLytics.get(TSMLyticsEnum.NetworkInfo);
-        Network network = null;
-
-        android.net.NetworkInfo networkInfo = ((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
-        if (networkInfo == null)
-            network = null;
-        else {
-
-            tv.setText("Numero " + networkInfo.getType() + "\n" + networkInfo.getSubtype());
-        }
+        HashMap<TSMLyticsEnum, Object> hashTSMLytics = new TSMLytics(MainActivity.this).getAllWithEntities();
+        Network network = (Network) hashTSMLytics.get(TSMLyticsEnum.NetworkInfo);
     }
 }

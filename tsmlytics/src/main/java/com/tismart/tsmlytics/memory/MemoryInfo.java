@@ -14,6 +14,15 @@ import java.io.FileReader;
  */
 public class MemoryInfo {
 
+    /**
+     * Obtiene la información de la memoria del dispositivo.
+     * Si hay algún error el método devolverá null
+     * Memory.Free = Memoria libre en bytes long
+     * Memory.Used = Memoria usado en bytes long
+     * Memory.Total = Memoria total en bytes long
+     * @param mContext contexto de la aplicación
+     * @return
+     */
     public static Memory getMemoryInfo(Context mContext) {
         Memory memory = new Memory();
 

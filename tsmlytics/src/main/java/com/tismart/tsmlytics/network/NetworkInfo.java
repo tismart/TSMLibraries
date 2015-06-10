@@ -17,6 +17,15 @@ public class NetworkInfo {
 
     private static final CustomPhoneStateListener phoneStateListener = new CustomPhoneStateListener();
 
+    /**
+     * Obtiene la información de la red del dispositivo.
+     * Si hay algún error el método devolverá null
+     * Network.Connection = Modo de conexión Wi-Fi, Mobile, Ethernet, Bluetooth en String
+     * Network.Type = Tipo de conexión Wi-Fi, 3G, Edge entre otros en String
+     * Network.Streght = Intensidad en la conexión. Siempre es un número negativo en String
+     * @param mContext contexto de la aplicación
+     * @return
+     */
     public static Network getNetworkInfo(Context mContext) {
         Network network = new Network();
         try {

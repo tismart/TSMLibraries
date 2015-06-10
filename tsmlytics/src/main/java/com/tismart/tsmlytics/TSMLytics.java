@@ -174,6 +174,60 @@ public class TSMLytics {
         return hashTSMLytics;
     }
 
+    /**
+     *APP INFO<br>
+     * Obtiene las aplicaciones abiertas actuales en el dispositivo.<br>
+     * Si la versión de Android es mayor o igual al API 21 este método devolverá null<br>
+     * Si la versión de Android es menor al API 21 este método te devolverá una lista del tipo App<br>
+     * App.Name nombre de la aplicación en String<br>
+     * App.Icon ícono de la aplicación en Drawable<br>
+     * App.Package nombre del paquete de la aplicación en String<br>
+     *<p>
+     *DEVICE INFO<br>
+     * Obtiene los estados de algunos elmentos del dispositivo. Este método siempre devuelve un dato diferente a null<br>
+     * Device.Baterry  = Porcentaje de batería en float<br>
+     * Device.IsTablet = True or False en boolean<br>
+     * Device.Model = Modelo del dispositivo en String<br>
+     * Device.ID = ID del dispositivo Android.Secure.ID en String<br>
+     * Device.IsRooted = Si el dispositivo ha sido rooteado en boolean<br>
+     *<p>
+     * DISK INFO<br>
+     * Obtiene la información del disco interno del dispositivo. Si hubiera una SD-Card conectada también obtiene la información de ella.<br>
+     * Si hay algún error el método devolverá null<br>
+     * Disk.InternalFree = Disco interno libre en bytes long<br>
+     * Disk.InternalUsed = Disco interno usado en bytes long<br>
+     * Disk.InternalTotal = Disco interno total en bytes long<br>
+     * Disk.ExternalFree = Disco externo libre en bytes long<br>
+     * Disk.ExternalUsed = Disco externo usado en bytes long<br>
+     * Disk.ExternalTotal = Disco externo total en bytes long<br>
+     *<p>
+     *MEMORY INFO<br>
+     * Obtiene la información de la memoria del dispositivo.<br>
+     * Si hay algún error el método devolverá null<br>
+     * Memory.Free = Memoria libre en bytes long<br>
+     * Memory.Used = Memoria usado en bytes long<br>
+     * Memory.Total = Memoria total en bytes long<br>
+     *<p>
+     *NETWORK INFO<br>
+     * Obtiene la información de la red del dispositivo.<br>
+     * Si hay algún error el método devolverá null<br>
+     * Network.Connection = Modo de conexión Wi-Fi, Mobile, Ethernet, Bluetooth en String<br>
+     * Network.Type = Tipo de conexión Wi-Fi, 3G, Edge entre otros en String<br>
+     * Network.Streght = Intensidad en la conexión. Siempre es un número negativo en String<br>
+     *<p>
+     *OS INFO<br>
+     * Obtiene la información del dispositivo. Este método siempre devuelve un dato diferente a null<br>
+     * OS.Name = Nombre del sistema operativo en String<br>
+     * OS.Version = Versión del sistema operativo en String<br>
+     *<p>
+     *SCREEN INFO<br>
+     * Obtiene la información de la pantalla del dispositivo.<br>
+     * Si hay algún error el método devolverá null<br>
+     * Screen.Density = Densidad de la pantalla en int<br>
+     * Screen.Size = Tamaño de la pantalla en float<br>
+     * Screen.Orientation = Orientación de la pantalla en String<br>
+     * @return
+     */
     public HashMap<TSMLyticsEnum, Object> getAllWithEntities() {
         HashMap<TSMLyticsEnum, Object> hashTSMLytics = new HashMap<>();
 

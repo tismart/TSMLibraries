@@ -13,6 +13,17 @@ import java.io.File;
  */
 public class DiskInfo {
 
+    /**
+     * Obtiene la información del disco interno del dispositivo. Si hubiera una SD-Card conectada también obtiene la información de ella.
+     * Si hay algún error el método devolverá null
+     * Disk.InternalFree = Disco interno libre en bytes long
+     * Disk.InternalUsed = Disco interno usado en bytes long
+     * Disk.InternalTotal = Disco interno total en bytes long
+     * Disk.ExternalFree = Disco externo libre en bytes long
+     * Disk.ExternalUsed = Disco externo usado en bytes long
+     * Disk.ExternalTotal = Disco externo total en bytes long
+     * @return
+     */
     public static Disk getDiskInfo() {
         Disk disk = null;
         long blockSizeInternal = 0L, availableBlocksInternal = 0L, totalBlocksInternal = 0L, blockSizeExternal = 0L, availableBlocksExternal = 0L, totalBlocksExternal = 0L;

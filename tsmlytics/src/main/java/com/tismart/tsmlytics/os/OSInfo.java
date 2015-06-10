@@ -11,10 +11,16 @@ import java.lang.reflect.Field;
  */
 public class OSInfo {
 
+    /**
+     * Obtiene la información del dispositivo. Este método siempre devuelve un dato diferente a null
+     * OS.Name = Nombre del sistema operativo en String
+     * OS.Version = Versión del sistema operativo en String
+     * @return
+     */
     public static OS getOSInfo() {
         OS os = new OS();
+        os.setVersion(Build.VERSION.RELEASE);
         try {
-            os.setVersion(Build.VERSION.RELEASE);
             Field[] fields = Build.VERSION_CODES.class.getFields();
             String fieldName = "";
             for (Field field : fields) {
@@ -32,7 +38,7 @@ public class OSInfo {
             }
             os.setName(fieldName);
         } catch (Exception ex) {
-            os = null;
+            os.setName("");
         }
 
         return os;
