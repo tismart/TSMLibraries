@@ -10,6 +10,7 @@ import com.tismart.tsmlibrary.rest.RestClient;
 import com.tismart.tsmlibrary.rest.enums.AmbienteEnum;
 import com.tismart.tsmlibrary.rest.enums.ResponseCode;
 import com.tismart.tsmlibrary.rest.interfaces.RestCallback;
+import com.tismart.tsmlytics.TSMLytics;
 
 import org.json.JSONObject;
 
@@ -21,6 +22,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         TextView tv = (TextView) findViewById(R.id.tv);
+
+        TSMLytics lytics = new TSMLytics(this);
+        lytics.getAllWithEntities();
 
         try {
             JSONObject jsonObject = new JSONObject();
