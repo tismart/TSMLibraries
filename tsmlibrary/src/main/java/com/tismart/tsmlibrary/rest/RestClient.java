@@ -2,6 +2,7 @@ package com.tismart.tsmlibrary.rest;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.tismart.tsmlibrary.R;
 import com.tismart.tsmlibrary.rest.enums.AmbienteEnum;
@@ -23,7 +24,7 @@ import java.net.URL;
 
 /**
  * Created by luis.burgos on 08/04/2015.
- *
+ * <p/>
  * Clase abstracta que implementa los métodos post y get a usarse en las aplicaciones.
  * Se tienen que setear los valores de las variables DES_URL, QA_URL, PRD_URL y el ambienteEnum para poder obtener las rutas correctamente.
  */
@@ -132,12 +133,13 @@ public abstract class RestClient {
     //region Process methods
     private WebServiceResponse processPost(String str_url, JSONObject request) throws IOException, JSONException {
         WebServiceResponse wsresponse = new WebServiceResponse();
+        Log.i("TSMLibrary - RestClient", "URL: " + str_url);
+        Log.i("TSMLibrary - RestClient", "Request: " + request);
         URL url = new URL(str_url);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         try {
-
+            urlConnection.setConnectTimeout(60000);
             urlConnection.setDoOutput(true);
-            urlConnection.setFixedLengthStreamingMode(request.length());
             urlConnection.setRequestProperty(HTTP_POST_CONTENTTYPE, APPLICATION_JSON);
             OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
             out.write(request.toString());
@@ -155,10 +157,11 @@ public abstract class RestClient {
 
     private WebServiceResponse processGet(String str_url) throws IOException, JSONException {
         WebServiceResponse wsresponse = new WebServiceResponse();
+        Log.i("TSMLibrary - RestClient", "URL: " + str_url);
         URL url = new URL(str_url);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         try {
-
+            urlConnection.setConnectTimeout(60000);
             urlConnection.setRequestProperty(HTTP_POST_ACCEPT, APPLICATION_JSON);
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
             wsresponse.responseCode = ResponseCode.valueOf(urlConnection.getResponseCode());

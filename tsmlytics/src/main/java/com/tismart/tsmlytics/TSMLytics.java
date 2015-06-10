@@ -18,6 +18,7 @@ import java.util.HashMap;
  *
  *
  */
+@SuppressWarnings("deprecation")
 public class TSMLytics {
 
     private final Context mContext;

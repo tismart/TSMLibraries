@@ -9,6 +9,7 @@ import java.lang.reflect.Field;
 /**
  * Created by luis.rios on 29/04/2015.
  */
+@SuppressWarnings("SameReturnValue")
 public class OSInfo {
 
     /**

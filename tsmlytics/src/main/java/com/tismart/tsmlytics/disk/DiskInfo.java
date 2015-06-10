@@ -11,6 +11,7 @@ import java.io.File;
 /**
  * Created by luis.rios on 29/04/2015.
  */
+@SuppressWarnings("deprecation")
 public class DiskInfo {
 
     /**
@@ -25,8 +26,8 @@ public class DiskInfo {
      * @return
      */
     public static Disk getDiskInfo() {
-        Disk disk = null;
-        long blockSizeInternal = 0L, availableBlocksInternal = 0L, totalBlocksInternal = 0L, blockSizeExternal = 0L, availableBlocksExternal = 0L, totalBlocksExternal = 0L;
+        Disk disk;
+        long blockSizeInternal, availableBlocksInternal, totalBlocksInternal, blockSizeExternal, availableBlocksExternal, totalBlocksExternal;
 
         try {
             disk = new Disk();

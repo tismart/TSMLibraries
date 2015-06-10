@@ -7,6 +7,7 @@ import com.tismart.tsmlibrary.database.AbstractDAO;
  * Created by luis.burgos on 07/05/2015.
  *
  */
+@SuppressWarnings("ALL")
 public class EntidadDAO extends AbstractDAO<Entidad> {
 
     public EntidadDAO() {

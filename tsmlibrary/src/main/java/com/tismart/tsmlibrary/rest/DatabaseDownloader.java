@@ -18,7 +18,7 @@ import java.net.URL;
  *
  * Clase utilitaria que maneja la descarga inicial de una base de datos.
  */
-@SuppressWarnings({"unused", "ResultOfMethodCallIgnored"})
+@SuppressWarnings({"unused", "ResultOfMethodCallIgnored", "WeakerAccess"})
 public class DatabaseDownloader {
 
     public static void execute(String url_db, String app_name, String db_name, final DatabaseDownloadListener listener) {

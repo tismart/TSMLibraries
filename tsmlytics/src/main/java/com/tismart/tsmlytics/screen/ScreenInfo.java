@@ -13,6 +13,7 @@ import com.tismart.tsmlytics.entities.Screen;
 /**
  * Created by luis.rios on 29/04/2015.
  */
+@SuppressWarnings("deprecation")
 public class ScreenInfo {
 
     /**
