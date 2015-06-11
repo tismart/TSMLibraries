@@ -21,14 +21,14 @@ import java.io.InputStreamReader;
 public class DeviceInfo {
 
     /**
-     * Obtiene los estados de algunos elmentos del dispositivo. Este método siempre devuelve un dato diferente a null
-     * Device.Baterry  = Porcentaje de batería en float
-     * Device.IsTablet = True or False en boolean
-     * Device.Model = Modelo del dispositivo en String
-     * Device.ID = ID del dispositivo Android.Secure.ID en String
-     * Device.IsRooted = Si el dispositivo ha sido rooteado en boolean
+     * <p>Obtiene los estados de algunos elmentos del dispositivo. Este método siempre devuelve un dato diferente a null</p>
+     * <p>Device.Baterry  = Porcentaje de batería en float</p>
+     * <p>Device.IsTablet = True or False en boolean</p>
+     * <p>Device.Model = Modelo del dispositivo en String</p>
+     * <p>Device.ID = ID del dispositivo Android.Secure.ID en String</p>
+     * <p>Device.IsRooted = Si el dispositivo ha sido rooteado en boolean</p>
      * @param mContext contexto de la aplicación
-     * @return
+     * @return Device
      */
     public static Device getDeviceInfo(Context mContext) {
         Device device = new Device();

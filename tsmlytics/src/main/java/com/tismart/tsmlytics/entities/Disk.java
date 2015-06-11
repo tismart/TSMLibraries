@@ -20,70 +20,70 @@ public class Disk implements Parcelable {
             return new Disk[size];
         }
     };
-    private float InternalFree;
-    private float InternalUsed;
-    private float InternalTotal;
-    private float ExternalFree;
-    private float ExternalUsed;
-    private float ExternalTotal;
+    private long InternalFree;
+    private long InternalUsed;
+    private long InternalTotal;
+    private long ExternalFree;
+    private long ExternalUsed;
+    private long ExternalTotal;
 
     public Disk() {
     }
 
     protected Disk(Parcel in) {
-        InternalFree = in.readFloat();
-        InternalUsed = in.readFloat();
-        InternalTotal = in.readFloat();
-        ExternalFree = in.readFloat();
-        ExternalUsed = in.readFloat();
-        ExternalTotal = in.readFloat();
+        InternalFree = in.readLong();
+        InternalUsed = in.readLong();
+        InternalTotal = in.readLong();
+        ExternalFree = in.readLong();
+        ExternalUsed = in.readLong();
+        ExternalTotal = in.readLong();
     }
 
-    public float getInternalFree() {
+    public long getInternalFree() {
         return InternalFree;
     }
 
-    public void setInternalFree(float internalFree) {
+    public void setInternalFree(long internalFree) {
         InternalFree = internalFree;
     }
 
-    public float getInternalUsed() {
+    public long getInternalUsed() {
         return InternalUsed;
     }
 
-    public void setInternalUsed(float internalUsed) {
+    public void setInternalUsed(long internalUsed) {
         InternalUsed = internalUsed;
     }
 
-    public float getInternalTotal() {
+    public long getInternalTotal() {
         return InternalTotal;
     }
 
-    public void setInternalTotal(float internalTotal) {
+    public void setInternalTotal(long internalTotal) {
         InternalTotal = internalTotal;
     }
 
-    public float getExternalFree() {
+    public long getExternalFree() {
         return ExternalFree;
     }
 
-    public void setExternalFree(float externalFree) {
+    public void setExternalFree(long externalFree) {
         ExternalFree = externalFree;
     }
 
-    public float getExternalUsed() {
+    public long getExternalUsed() {
         return ExternalUsed;
     }
 
-    public void setExternalUsed(float externalUsed) {
+    public void setExternalUsed(long externalUsed) {
         ExternalUsed = externalUsed;
     }
 
-    public float getExternalTotal() {
+    public long getExternalTotal() {
         return ExternalTotal;
     }
 
-    public void setExternalTotal(float externalTotal) {
+    public void setExternalTotal(long externalTotal) {
         ExternalTotal = externalTotal;
     }
 
@@ -94,11 +94,11 @@ public class Disk implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeFloat(InternalFree);
-        dest.writeFloat(InternalUsed);
-        dest.writeFloat(InternalTotal);
-        dest.writeFloat(ExternalFree);
-        dest.writeFloat(ExternalUsed);
-        dest.writeFloat(ExternalTotal);
+        dest.writeLong(InternalFree);
+        dest.writeLong(InternalUsed);
+        dest.writeLong(InternalTotal);
+        dest.writeLong(ExternalFree);
+        dest.writeLong(ExternalUsed);
+        dest.writeLong(ExternalTotal);
     }
 }

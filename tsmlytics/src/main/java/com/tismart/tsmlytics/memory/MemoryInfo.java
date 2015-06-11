@@ -15,13 +15,13 @@ import java.io.FileReader;
 public class MemoryInfo {
 
     /**
-     * Obtiene la información de la memoria del dispositivo.
-     * Si hay algún error el método devolverá null
-     * Memory.Free = Memoria libre en bytes long
-     * Memory.Used = Memoria usado en bytes long
-     * Memory.Total = Memoria total en bytes long
+     * <p>Obtiene la información de la memoria del dispositivo.</p>
+     * <p>Si hay algún error el método devolverá null</p>
+     * <p>Memory.Free = Memoria libre en bytes long</p>
+     * <p>Memory.Used = Memoria usado en bytes long</p>
+     * <p>Memory.Total = Memoria total en bytes long</p>
      * @param mContext contexto de la aplicación
-     * @return
+     * @return Memory
      */
     public static Memory getMemoryInfo(Context mContext) {
         Memory memory = new Memory();

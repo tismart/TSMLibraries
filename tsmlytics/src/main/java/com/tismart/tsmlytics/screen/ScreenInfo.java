@@ -17,13 +17,13 @@ import com.tismart.tsmlytics.entities.Screen;
 public class ScreenInfo {
 
     /**
-     * Obtiene la información de la pantalla del dispositivo.
-     * Si hay algún error el método devolverá null
-     * Screen.Density = Densidad de la pantalla en int
-     * Screen.Size = Tamaño de la pantalla en float
-     * Screen.Orientation = Orientación de la pantalla en String
+     * <p>Obtiene la información de la pantalla del dispositivo.</p>
+     * <p>Si hay algún error el método devolverá null</p>
+     * <p>Screen.Density = Densidad de la pantalla en int</p>
+     * <p>Screen.Size = Tamaño de la pantalla en float</p>
+     * <p>Screen.Orientation = Orientación de la pantalla en String</p>
      * @param mContext contexto de la aplicación
-     * @return
+     * @return Screen
      */
     public static Screen getScreenInfo(Context mContext) {
         Screen screen = new Screen();

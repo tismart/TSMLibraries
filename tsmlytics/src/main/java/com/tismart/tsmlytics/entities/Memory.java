@@ -20,40 +20,40 @@ public class Memory implements Parcelable {
             return new Memory[size];
         }
     };
-    private float Free;
-    private float Used;
-    private float Total;
+    private long Free;
+    private long Used;
+    private long Total;
 
     public Memory() {
     }
 
     protected Memory(Parcel in) {
-        Free = in.readFloat();
-        Used = in.readFloat();
-        Total = in.readFloat();
+        Free = in.readLong();
+        Used = in.readLong();
+        Total = in.readLong();
     }
 
-    public float getFree() {
+    public long getFree() {
         return Free;
     }
 
-    public void setFree(float free) {
+    public void setFree(long free) {
         Free = free;
     }
 
-    public float getUsed() {
+    public long getUsed() {
         return Used;
     }
 
-    public void setUsed(float used) {
+    public void setUsed(long used) {
         Used = used;
     }
 
-    public float getTotal() {
+    public long getTotal() {
         return Total;
     }
 
-    public void setTotal(float total) {
+    public void setTotal(long total) {
         Total = total;
     }
 
@@ -64,8 +64,8 @@ public class Memory implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeFloat(Free);
-        dest.writeFloat(Used);
-        dest.writeFloat(Total);
+        dest.writeLong(Free);
+        dest.writeLong(Used);
+        dest.writeLong(Total);
     }
 }

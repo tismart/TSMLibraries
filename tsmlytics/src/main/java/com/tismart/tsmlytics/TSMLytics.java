@@ -227,7 +227,7 @@ public class TSMLytics {
      * <p>Screen.Density = Densidad de la pantalla en int</p>
      * <p>Screen.Size = Tamaño de la pantalla en float</p>
      * <p>Screen.Orientation = Orientación de la pantalla en String</p>
-     * @return
+     * @return HashMap-(TSMLyticsEnum,Object) object es cada entidad
      */
     public HashMap<TSMLyticsEnum, Object> getAllWithEntities() {
         HashMap<TSMLyticsEnum, Object> hashTSMLytics = new HashMap<>();
