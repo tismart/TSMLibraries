@@ -23,6 +23,7 @@ public class NetworkInfo {
      * <p>Network.Connection = Modo de conexión Wi-Fi, Mobile, Ethernet, Bluetooth en String</p>
      * <p>Network.Type = Tipo de conexión Wi-Fi, 3G, Edge entre otros en String</p>
      * <p>Network.Streght = Intensidad en la conexión. Siempre es un número negativo en String</p>
+     *
      * @param mContext contexto de la aplicación
      * @return Network
      */
@@ -316,8 +317,10 @@ public class NetworkInfo {
         @Override
         public void onSignalStrengthsChanged(SignalStrength signalStrength) {
             super.onSignalStrengthsChanged(signalStrength);
-
-            iSignalStrength = signalStrength.getGsmSignalStrength();
+            if (signalStrength.isGsm())
+                iSignalStrength = signalStrength.getGsmSignalStrength();
+            else
+                iSignalStrength = signalStrength.getCdmaDbm();
         }
     }
 }
