@@ -154,7 +154,6 @@ public class NetworkInfo {
                         case ConnectivityManager.TYPE_MOBILE_SUPL:
                             TelephonyManager telephonyManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
                             telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
-                            telephonyManager.listen(null, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
                             network.setStrength(String.valueOf((CustomPhoneStateListener.iSignalStrength * 2) - 113));
                             break;
                         default:
