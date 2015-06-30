@@ -24,7 +24,7 @@ import java.net.URL;
 
 /**
  * Created by luis.burgos on 08/04/2015.
- * <p>
+ * <p/>
  * Clase abstracta que implementa los métodos post y get a usarse en las aplicaciones.
  * Se tienen que setear los valores de las variables DES_URL, QA_URL, PRD_URL y el ambienteEnum para poder obtener las rutas correctamente.
  */
@@ -95,7 +95,7 @@ public abstract class RestClient {
             protected void onPostExecute(WebServiceResponse response) {
                 mCallback.OnResponse(response.responseCode, response.response);
             }
-        }.execute(getUrl() + service + method, request.toString());
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getUrl() + service + method, request.toString());
     }
 
     public void getAsync(Context context, String service, String method, final RestCallback mCallback) throws NetworkException, IOException {
@@ -126,7 +126,7 @@ public abstract class RestClient {
             protected void onPostExecute(WebServiceResponse response) {
                 mCallback.OnResponse(response.responseCode, response.response);
             }
-        }.execute(getUrl() + service + method);
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getUrl() + service + method);
     }
 
     //endregion
