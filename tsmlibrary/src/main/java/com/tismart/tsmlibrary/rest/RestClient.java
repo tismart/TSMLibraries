@@ -40,6 +40,7 @@ public abstract class RestClient {
     protected String DES_URL;
     protected String QA_URL;
     protected String PRD_URL;
+    private AsyncTask<String, Void, WebServiceResponse> task;
 
     //region Synchronous Methods
     public void postSync(Context context, String service, String method, JSONObject request, RestCallback mCallback) throws NetworkException, IOException, JSONException {
@@ -72,7 +73,7 @@ public abstract class RestClient {
         if (!ConnectionUtil.isNetworkAvailable(context)) {
             throw new NetworkException(context.getString(R.string.tsmlibrary_error_conexion));
         }
-        new AsyncTask<String, Void, WebServiceResponse>() {
+        task = new AsyncTask<String, Void, WebServiceResponse>() {
 
             @Override
             protected void onPreExecute() {
@@ -102,7 +103,7 @@ public abstract class RestClient {
         if (!ConnectionUtil.isNetworkAvailable(context)) {
             throw new NetworkException(context.getString(R.string.tsmlibrary_error_conexion));
         }
-        new AsyncTask<String, Void, WebServiceResponse>() {
+        task = new AsyncTask<String, Void, WebServiceResponse>() {
 
             @Override
             protected void onPreExecute() {
@@ -172,6 +173,12 @@ public abstract class RestClient {
             urlConnection.disconnect();
         }
         return wsresponse;
+    }
+
+    public void cancel() {
+        if (task != null && task.getStatus().equals(AsyncTask.Status.RUNNING)) {
+            task.cancel(true);
+        }
     }
 
     private String getUrl() {

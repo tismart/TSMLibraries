@@ -136,9 +136,9 @@ public abstract class AbstractDAO<T> {
                 default:
                     mensaje += " LIKE '" + field.get(entidad).toString() + "'";
             }
+            cont++;
             if (lstPrimaryFields.size() > cont) {
                 mensaje += " AND ";
-                cont++;
             }
         }
         return mensaje;
@@ -154,17 +154,17 @@ public abstract class AbstractDAO<T> {
             switch (elemento.elementType()) {
                 case STRING:
                 case LONG:
-                    mensaje += " LIKE '" + field.get(ids[cont]).toString() + "'";
+                    mensaje += " LIKE '" + ids[cont] + "'";
                     break;
                 case INTEGER:
                 case BOOLEAN:
-                    mensaje += " = " + +field.getInt(ids[cont]);
+                    mensaje += " = " + ids[cont];
                     break;
                 case DOUBLE:
-                    mensaje += " = " + +field.getDouble(ids[cont]);
+                    mensaje += " = " + ids[cont];
                     break;
                 default:
-                    mensaje += " LIKE '" + field.get(ids[cont]).toString() + "'";
+                    mensaje += " LIKE '" + ids[cont] + "'";
             }
             if (lstPrimaryFields.size() > cont) {
                 mensaje += " AND ";
