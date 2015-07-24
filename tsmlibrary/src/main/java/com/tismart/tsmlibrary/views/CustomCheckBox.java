@@ -2,8 +2,8 @@ package com.tismart.tsmlibrary.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.util.AttributeSet;
-import android.widget.CheckBox;
 
 import com.tismart.tsmlibrary.R;
 import com.tismart.tsmlibrary.typefaces.RobotoTypefaceUtils;
@@ -11,11 +11,11 @@ import com.tismart.tsmlibrary.typefaces.TypefaceUtils;
 
 /**
  * Created by luis.burgos on 22/04/2015.
- *
+ * <p/>
  * Vista customizada de un CheckBox donde se puede agregar los typeface customizados.
  */
 @SuppressWarnings("unused")
-public class CustomCheckBox extends CheckBox {
+public class CustomCheckBox extends AppCompatCheckBox {
 
     private TypefaceUtils mTypefaceUtils = null;
     private int fontValue = 0;

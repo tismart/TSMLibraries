@@ -2,8 +2,8 @@ package com.tismart.tsmlibrary.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.support.v7.widget.AppCompatButton;
 import android.util.AttributeSet;
-import android.widget.Button;
 
 import com.tismart.tsmlibrary.R;
 import com.tismart.tsmlibrary.typefaces.RobotoTypefaceUtils;
@@ -11,12 +11,12 @@ import com.tismart.tsmlibrary.typefaces.TypefaceUtils;
 
 /**
  * Created by luis.burgos on 20/03/2015.
- *
+ * <p/>
  * Vista customizada de un Button donde se puede agregar los typeface customizados.
  */
 
 @SuppressWarnings("unused")
-public class CustomButton extends Button {
+public class CustomButton extends AppCompatButton {
 
     private TypefaceUtils mTypefaceUtils = null;
     private int fontValue = 0;

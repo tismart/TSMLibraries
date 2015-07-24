@@ -2,8 +2,8 @@ package com.tismart.tsmlibrary.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.support.v7.widget.AppCompatEditText;
 import android.util.AttributeSet;
-import android.widget.EditText;
 
 import com.tismart.tsmlibrary.R;
 import com.tismart.tsmlibrary.typefaces.RobotoTypefaceUtils;
@@ -11,11 +11,11 @@ import com.tismart.tsmlibrary.typefaces.TypefaceUtils;
 
 /**
  * Created by luis.burgos on 20/03/2015.
- *
+ * <p/>
  * Vista customizada de un EditText donde se puede agregar los typeface customizados.
  */
 @SuppressWarnings("unused")
-public class CustomEditText extends EditText {
+public class CustomEditText extends AppCompatEditText {
 
     private TypefaceUtils mTypefaceUtils = null;
     private int fontValue = 0;

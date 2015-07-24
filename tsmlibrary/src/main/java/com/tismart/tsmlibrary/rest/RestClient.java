@@ -96,6 +96,11 @@ public abstract class RestClient {
             protected void onPostExecute(WebServiceResponse response) {
                 mCallback.OnResponse(response.responseCode, response.response);
             }
+
+            @Override
+            protected void onCancelled() {
+                mCallback.OnResponse(ResponseCode.HTTP_ERROR_UNRECOGNIZED,new JSONObject());
+            }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getUrl() + service + method, request.toString());
     }
 
@@ -126,6 +131,11 @@ public abstract class RestClient {
             @Override
             protected void onPostExecute(WebServiceResponse response) {
                 mCallback.OnResponse(response.responseCode, response.response);
+            }
+
+            @Override
+            protected void onCancelled() {
+                mCallback.OnResponse(ResponseCode.HTTP_ERROR_UNRECOGNIZED,new JSONObject());
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getUrl() + service + method);
     }
