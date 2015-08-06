@@ -10,7 +10,7 @@ import org.json.JSONObject;
  * Interface usada para las respuestas a llamadas a servicios.
  */
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "EmptyMethod"})
 public interface RestCallback {
     void OnStart();
 

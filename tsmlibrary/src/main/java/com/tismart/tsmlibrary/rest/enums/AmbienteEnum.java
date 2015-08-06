@@ -5,6 +5,7 @@ package com.tismart.tsmlibrary.rest.enums;
  *
  * Enum con los ambientes a los que apunta la aplicación.
  */
+@SuppressWarnings("unused")
 public enum AmbienteEnum {
     DESARROLLO, QA, PRODUCCION
 }

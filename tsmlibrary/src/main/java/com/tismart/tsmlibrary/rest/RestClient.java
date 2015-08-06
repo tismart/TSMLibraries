@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.tismart.tsmlibrary.R;
-import com.tismart.tsmlibrary.rest.enums.AmbienteEnum;
 import com.tismart.tsmlibrary.rest.enums.ResponseCode;
 import com.tismart.tsmlibrary.rest.exceptions.NetworkException;
 import com.tismart.tsmlibrary.rest.interfaces.RestCallback;
@@ -37,7 +36,7 @@ public abstract class RestClient {
     private final static String APPLICATION_JSON = "application/json";
     private final static String CHARSET = "UTF-8";
 
-    protected String URL;
+    protected final String URL;
     private AsyncTask<String, Void, WebServiceResponse> task;
 
     protected RestClient(String url){

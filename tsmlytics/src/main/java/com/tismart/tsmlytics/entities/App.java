@@ -7,7 +7,7 @@ import android.os.Parcelable;
 /**
  * Created by luis.rios on 21/05/2015.
  */
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class App implements Parcelable {
 
     @SuppressWarnings("unused")

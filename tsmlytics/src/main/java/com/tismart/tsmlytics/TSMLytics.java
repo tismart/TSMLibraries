@@ -18,7 +18,7 @@ import java.util.HashMap;
  *
  *
  */
-@SuppressWarnings("deprecation")
+@SuppressWarnings({"deprecation", "UnusedReturnValue"})
 public class TSMLytics {
 
     private final Context mContext;
