@@ -11,7 +11,6 @@ import com.tismart.tsmlibrary.typefaces.TypefaceUtils;
 
 /**
  * Created by luis.burgos on 22/04/2015.
- * <p/>
  * Vista customizada de un CheckBox donde se puede agregar los typeface customizados.
  */
 @SuppressWarnings("unused")

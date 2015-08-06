@@ -15,7 +15,6 @@ import java.net.URL;
 
 /**
  * Created by luis.burgos on 14/05/2015.
- * <p/>
  * Clase utilitaria que maneja la descarga inicial de una base de datos. La descarga se realizará en la carpeta Cache.
  * Cabe destacar que este método es de solo descarga de la base de datos y se debe eliminar manualmente el archivo.
  */

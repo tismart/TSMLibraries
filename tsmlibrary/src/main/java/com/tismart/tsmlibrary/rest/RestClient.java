@@ -23,7 +23,6 @@ import java.net.URL;
 
 /**
  * Created by luis.burgos on 08/04/2015.
- * <p/>
  * Clase abstracta que implementa los métodos post y get a usarse en las aplicaciones.
  * Se tienen que setear los valores de las variables DES_URL, QA_URL, PRD_URL y el ambienteEnum para poder obtener las rutas correctamente.
  */
