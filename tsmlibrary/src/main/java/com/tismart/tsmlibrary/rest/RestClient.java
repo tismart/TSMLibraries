@@ -36,11 +36,13 @@ public abstract class RestClient {
     private final static String HTTP_POST_CONTENTTYPE = "Content-type";
     private final static String APPLICATION_JSON = "application/json";
     private final static String CHARSET = "UTF-8";
-    protected AmbienteEnum ambienteEnum;
-    protected String DES_URL;
-    protected String QA_URL;
-    protected String PRD_URL;
+
+    protected String URL;
     private AsyncTask<String, Void, WebServiceResponse> task;
+
+    protected RestClient(String url){
+        URL = url;
+    }
 
     //region Synchronous Methods
     public void postSync(Context context, String service, String method, JSONObject request, RestCallback mCallback) throws NetworkException, IOException, JSONException {
@@ -48,7 +50,7 @@ public abstract class RestClient {
             throw new NetworkException(context.getString(R.string.tsmlibrary_error_conexion));
         }
         mCallback.OnStart();
-        WebServiceResponse serviceResponse = processPost(getUrl() + service + method, request);
+        WebServiceResponse serviceResponse = processPost(URL + service + method, request);
         mCallback.OnResponse(serviceResponse.responseCode, serviceResponse.response);
     }
 
@@ -56,11 +58,11 @@ public abstract class RestClient {
         if (!ConnectionUtil.isNetworkAvailable(context)) {
             throw new NetworkException(context.getString(R.string.tsmlibrary_error_conexion));
         }
-        URL url = new URL(getUrl() + service + method);
+        URL url = new URL(URL + service + method);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         try {
             mCallback.OnStart();
-            WebServiceResponse serviceResponse = processGet(getUrl() + service + method);
+            WebServiceResponse serviceResponse = processGet(URL + service + method);
             mCallback.OnResponse(serviceResponse.responseCode, serviceResponse.response);
         } finally {
             urlConnection.disconnect();
@@ -101,7 +103,7 @@ public abstract class RestClient {
             protected void onCancelled() {
                 mCallback.OnResponse(ResponseCode.HTTP_ERROR_UNRECOGNIZED,new JSONObject());
             }
-        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getUrl() + service + method, request.toString());
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, URL + service + method, request.toString());
     }
 
     public void getAsync(Context context, String service, String method, final RestCallback mCallback) throws NetworkException, IOException {
@@ -137,7 +139,7 @@ public abstract class RestClient {
             protected void onCancelled() {
                 mCallback.OnResponse(ResponseCode.HTTP_ERROR_UNRECOGNIZED,new JSONObject());
             }
-        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getUrl() + service + method);
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, URL + service + method);
     }
 
     //endregion
@@ -191,18 +193,6 @@ public abstract class RestClient {
         }
     }
 
-    private String getUrl() {
-        switch (ambienteEnum) {
-            case DESARROLLO:
-                return DES_URL;
-            case QA:
-                return QA_URL;
-            case PRODUCCION:
-                return PRD_URL;
-            default:
-                return DES_URL;
-        }
-    }
     //endregion
 
     private String convertStreamToString(InputStream is) {

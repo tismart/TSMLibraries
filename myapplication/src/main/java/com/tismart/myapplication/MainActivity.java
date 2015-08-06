@@ -1,14 +1,13 @@
 package com.tismart.myapplication;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.TextView;
 
+import com.tismart.tsmlibrary.rest.FileDownloader;
 import com.tismart.tsmlibrary.rest.RestClient;
-import com.tismart.tsmlibrary.rest.enums.AmbienteEnum;
 import com.tismart.tsmlibrary.rest.enums.ResponseCode;
+import com.tismart.tsmlibrary.rest.interfaces.DatabaseDownloadListener;
 import com.tismart.tsmlibrary.rest.interfaces.RestCallback;
 import com.tismart.tsmlytics.TSMLytics;
 
@@ -21,8 +20,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        TextView tv = (TextView) findViewById(R.id.tv);
 
         TSMLytics lytics = new TSMLytics(this);
         lytics.getAllWithEntities();
@@ -46,15 +43,43 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+
+        FileDownloader.execute(this, "http://qaelb-webmobile-2113058549.us-east-1.elb.amazonaws.com/FTPSite/FFVVMovil/SQLite/prueba_SSO/BelcorpCore.sqlite", "BelcorpCore.sqlite", new DatabaseDownloadListener() {
+            ProgressDialog progressDialog;
+
+            @Override
+            public void onStart() {
+                progressDialog = new ProgressDialog(MainActivity.this);
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                progressDialog.setMessage("Descargando base de datos");
+                progressDialog.setTitle("Obteniendo BD");
+                progressDialog.setIndeterminate(false);
+                progressDialog.setCancelable(false);
+                progressDialog.setMax(100);
+                progressDialog.show();
+            }
+
+            @Override
+            public void publishProgress(double progress) {
+                progressDialog.setProgress((int) progress);
+            }
+
+            @Override
+            public void onCompleted() {
+                progressDialog.dismiss();
+            }
+
+            @Override
+            public void onError() {
+                progressDialog.cancel();
+            }
+        });
     }
 
     private class WebServiceRestClient extends RestClient {
 
-        android.net.NetworkInfo networkInfo = ((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
-
         WebServiceRestClient() {
-            DES_URL = "http://192.168.1.171:1991/EsikaRestSlim/index.php/pack_product";
-            ambienteEnum = AmbienteEnum.DESARROLLO;
+            super("http://192.168.1.171:1991/EsikaRestSlim/index.php/pack_product");
         }
     }
 }

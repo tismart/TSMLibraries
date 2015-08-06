@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.Environment;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,26 +14,24 @@ import java.io.OutputStream;
 
 /**
  * Created by Luis Miguel on 23/01/2015.
- *
+ * <p/>
  * Clase abstracta que permite generar una base de datos y cuenta con la opción de generar una bd desde Assets o desde una descarga vía web.
  */
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class SQLDatabaseHelper extends SQLiteOpenHelper {
 
     final private String DB_NAME;
-    final private String APP_NAME;
 
     final private Context context;
     final private String DB_PATH;
 
-    public SQLDatabaseHelper(Context context, String app_name, String db_name, int db_version) {
+    public SQLDatabaseHelper(Context context, String db_name, int db_version) {
         super(context, db_name, null, db_version);
         this.context = context;
 
         DB_PATH = context.getDatabasePath(db_name).getPath().replace(db_name, "");
 
         DB_NAME = db_name;
-        APP_NAME = app_name;
     }
 
     @Override
@@ -94,10 +91,7 @@ public class SQLDatabaseHelper extends SQLiteOpenHelper {
         while ((length = myInput.read(buffer)) > 0) {
             myOutput.write(buffer, 0, length);
         }
-        f = new File(getDownloadDBFile());
-        if (f.exists()) {
-            f.delete();
-        }
+        context.deleteFile(DB_NAME);
         myOutput.flush();
         myOutput.close();
         myInput.close();
@@ -131,7 +125,7 @@ public class SQLDatabaseHelper extends SQLiteOpenHelper {
     }
 
     private String getDownloadDBFile() {
-        return Environment.getExternalStorageDirectory() + File.separator + APP_NAME + File.separator + DB_NAME;
+        return context.getCacheDir() + File.separator + DB_NAME;
     }
 
 }

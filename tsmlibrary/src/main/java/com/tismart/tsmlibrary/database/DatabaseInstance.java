@@ -16,17 +16,15 @@ public class DatabaseInstance {
     private static DatabaseInstance ourInstance = null;
     final private Context context;
     private final String db_name;
-    private final String app_name;
     private final int db_version;
     public boolean existDatabase = false;
     private SQLiteDatabase db;
     private SQLDatabaseHelper dbHelper;
 
-    private DatabaseInstance(Context context, String app_name, String db_name, int db_version, boolean fromAssets) {
-        dbHelper = new SQLDatabaseHelper(context, app_name, db_name, db_version);
+    private DatabaseInstance(Context context, String db_name, int db_version, boolean fromAssets) {
+        dbHelper = new SQLDatabaseHelper(context, db_name, db_version);
         this.context = context;
         this.db_name = db_name;
-        this.app_name = app_name;
         this.db_version = db_version;
         try {
             dbHelper.createDatabase(fromAssets);
@@ -38,8 +36,8 @@ public class DatabaseInstance {
         }
     }
 
-    public static void initialize(Context context, String app_name, String db_name, int db_version, boolean fromAssets) {
-        ourInstance = new DatabaseInstance(context, app_name, db_name, db_version, fromAssets);
+    public static void initialize(Context context, String db_name, int db_version, boolean fromAssets) {
+        ourInstance = new DatabaseInstance(context, db_name, db_version, fromAssets);
     }
 
     public static DatabaseInstance getInstance() {
@@ -48,7 +46,7 @@ public class DatabaseInstance {
 
     public SQLDatabaseHelper getDBHelper() {
         if (dbHelper == null) {
-            dbHelper = new SQLDatabaseHelper(context, app_name, db_name, db_version);
+            dbHelper = new SQLDatabaseHelper(context, db_name, db_version);
         }
         return dbHelper;
     }

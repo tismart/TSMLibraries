@@ -38,7 +38,7 @@ public class LetterTileProvider {
      * Constructor for <code>LetterTileProvider</code>
      *
      * @param context The {@link Context} to use
-     * @param letrasAMostrarse cantidad de lestras a mostrarse
+     * @param letrasAMostrarse cantidad de letras a mostrarse
      */
     public LetterTileProvider(Context context, int letrasAMostrarse) {
         this.context = context;

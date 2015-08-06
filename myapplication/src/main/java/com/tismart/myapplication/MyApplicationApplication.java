@@ -13,7 +13,7 @@ public class MyApplicationApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        DatabaseInstance.initialize(this, "MyApplication", "MyApplication.sqlite", 1, true);
+        DatabaseInstance.initialize(this, "MyApplication.sqlite", 1, true);
     }
 
 }
