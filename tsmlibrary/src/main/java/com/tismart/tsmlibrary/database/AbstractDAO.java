@@ -83,6 +83,74 @@ public abstract class AbstractDAO<T> {
         return actualizarEntidad(cv, getSelectionIdentifier(entidad));
     }
 
+    public int deleteEntity(T entidad) throws IllegalAccessException, DatabaseModificationException {
+        return removerEntidad(getSelectionIdentifier(entidad));
+    }
+
+    public long replaceEntity(T entidad) throws IllegalAccessException, DatabaseModificationException {
+        return reemplazarEntidad(transformEntityToContentValues(entidad));
+    }
+
+    public boolean bulkInsertEntity(ArrayList<T> lstEntidad) {
+        long id;
+        boolean insertCorrect = true;
+        try {
+            for (T entidad : lstEntidad) {
+                id = insertEntity(entidad);
+                if (id == 0) {
+                    insertCorrect = false;
+                }
+            }
+        } catch (DatabaseModificationException iae) {
+            iae.printStackTrace();
+            insertCorrect = false;
+        }
+        return insertCorrect;
+    }
+
+    public boolean bulkUpdateEntity(ArrayList<T> lstEntidad) {
+        boolean updateCorrect = true;
+        try {
+            for (T entidad : lstEntidad) {
+                updateEntity(entidad);
+            }
+        } catch (IllegalAccessException | DatabaseModificationException iae) {
+            iae.printStackTrace();
+            updateCorrect = false;
+        }
+        return updateCorrect;
+    }
+
+    public boolean bulkDeleteEntity(ArrayList<T> lstEntidad) {
+        boolean deleteCorrect = true;
+        try {
+            for (T entidad : lstEntidad) {
+                deleteEntity(entidad);
+            }
+        } catch (IllegalAccessException | DatabaseModificationException iae) {
+            iae.printStackTrace();
+            deleteCorrect = false;
+        }
+        return deleteCorrect;
+    }
+
+    public boolean bulkReplaceEntity(ArrayList<T> lstEntidad) {
+        long rows_affected;
+        boolean replaceCorrect = true;
+        try {
+            for (T entidad : lstEntidad) {
+                rows_affected = replaceEntity(entidad);
+                if (rows_affected == 0) {
+                    replaceCorrect = false;
+                }
+            }
+        } catch (IllegalAccessException | DatabaseModificationException iae) {
+            iae.printStackTrace();
+            replaceCorrect = false;
+        }
+        return replaceCorrect;
+    }
+
     //  region Métodos privados
     private long insertarEntidad(ContentValues cv) throws DatabaseModificationException {
         long row_id = db.insert(tableName, null, cv);
@@ -100,13 +168,16 @@ public abstract class AbstractDAO<T> {
         return rows_affected;
     }
 
-    public int deleteEntidad(T entidad) throws IllegalAccessException, DatabaseModificationException {
-        return removerEntidad(getSelectionIdentifier(entidad));
-    }
-
-
     private int removerEntidad(String selection) throws DatabaseModificationException {
         int rows_affected = db.delete(tableName, selection, null);
+        if (rows_affected == 0) {
+            throw new DatabaseModificationException();
+        }
+        return rows_affected;
+    }
+
+    private long reemplazarEntidad(ContentValues cv) throws IllegalAccessException, DatabaseModificationException {
+        long rows_affected = db.replace(tableName, null, cv);
         if (rows_affected == 0) {
             throw new DatabaseModificationException();
         }
