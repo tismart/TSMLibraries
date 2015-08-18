@@ -17,12 +17,12 @@ import java.util.HashMap;
 @SuppressWarnings({"unused", "WeakerAccess", "UnusedReturnValue"})
 public abstract class AbstractDAO<T> {
 
-    protected static HashMap<String, Integer> lstColumnIndex;
-    private static ArrayList<Field> lstPrimaryFields;
-    private static HashMap<Field, Elemento> lstFieldElemento;
     final private String tableName;
     final private Class<T> clase;
     final private SQLiteDatabase db = DatabaseInstance.getInstance().getDatabase();
+    protected HashMap<String, Integer> lstColumnIndex;
+    private ArrayList<Field> lstPrimaryFields;
+    private HashMap<Field, Elemento> lstFieldElemento;
 
     //region Inicialización
     protected AbstractDAO(Class<T> entidad) {
