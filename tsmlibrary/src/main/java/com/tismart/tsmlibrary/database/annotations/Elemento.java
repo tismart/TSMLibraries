@@ -20,4 +20,6 @@ public @interface Elemento {
     TipoElemento elementType() default TipoElemento.STRING;
 
     boolean isPrimary() default false;
+
+    boolean isNull() default false;
 }

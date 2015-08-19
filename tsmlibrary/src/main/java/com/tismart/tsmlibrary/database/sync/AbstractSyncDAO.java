@@ -102,21 +102,41 @@ public abstract class AbstractSyncDAO<T> {
 
                     switch (elemento.elementType()) {
                         case LONG:
-                            f.setLong(entidad, transformCursorToLong(elemento.columnName(), cursor));
+                            if (elemento.isNull()) {
+                                f.set(entidad, transformCursorToLongNull(elemento.columnName(), cursor));
+                            } else {
+                                f.setLong(entidad, transformCursorToLong(elemento.columnName(), cursor));
+                            }
                             break;
                         case BLOB:
                             break;
                         case DOUBLE:
-                            f.setDouble(entidad, transformCursorToDouble(elemento.columnName(), cursor));
+                            if (elemento.isNull()) {
+                                f.set(entidad, transformCursorToDoubleNull(elemento.columnName(), cursor));
+                            } else {
+                                f.setDouble(entidad, transformCursorToDouble(elemento.columnName(), cursor));
+                            }
                             break;
                         case BOOLEAN:
-                            f.setBoolean(entidad, transformCursorToBoolean(elemento.columnName(), cursor));
+                            if (elemento.isNull()) {
+                                f.set(entidad, transformCursorToBooleanNull(elemento.columnName(), cursor));
+                            } else {
+                                f.setBoolean(entidad, transformCursorToBoolean(elemento.columnName(), cursor));
+                            }
                             break;
                         case STRING:
-                            f.set(entidad, transformCursorToString(elemento.columnName(), cursor));
+                            if (elemento.isNull()) {
+                                f.set(entidad, transformCursorToStringNull(elemento.columnName(), cursor));
+                            } else {
+                                f.set(entidad, transformCursorToString(elemento.columnName(), cursor));
+                            }
                             break;
                         case INTEGER:
-                            f.setInt(entidad, transformCursorToInt(elemento.columnName(), cursor));
+                            if (elemento.isNull()) {
+                                f.set(entidad, transformCursorToIntNull(elemento.columnName(), cursor));
+                            } else {
+                                f.setInt(entidad, transformCursorToInt(elemento.columnName(), cursor));
+                            }
                             break;
                     }
                 }
@@ -132,19 +152,40 @@ public abstract class AbstractSyncDAO<T> {
         return cursor.isNull(lstColumnIndex.get(name)) ? 0 : cursor.getInt(lstColumnIndex.get(name));
     }
 
+    private Integer transformCursorToIntNull(String name, Cursor cursor) {
+        return cursor.isNull(lstColumnIndex.get(name)) ? null : cursor.getInt(lstColumnIndex.get(name));
+    }
+
     private double transformCursorToDouble(String name, Cursor cursor) {
         return cursor.isNull(lstColumnIndex.get(name)) ? 0d : cursor.getDouble(lstColumnIndex.get(name));
+    }
+
+    private Double transformCursorToDoubleNull(String name, Cursor cursor) {
+        return cursor.isNull(lstColumnIndex.get(name)) ? null : cursor.getDouble(lstColumnIndex.get(name));
     }
 
     private long transformCursorToLong(String name, Cursor cursor) {
         return cursor.isNull(lstColumnIndex.get(name)) ? 0l : cursor.getLong(lstColumnIndex.get(name));
     }
 
+    private Long transformCursorToLongNull(String name, Cursor cursor) {
+        return cursor.isNull(lstColumnIndex.get(name)) ? null : cursor.getLong(lstColumnIndex.get(name));
+    }
+
     private String transformCursorToString(String name, Cursor cursor) {
         return cursor.isNull(lstColumnIndex.get(name)) ? "" : cursor.getString(lstColumnIndex.get(name));
     }
 
+    private String transformCursorToStringNull(String name, Cursor cursor) {
+        return cursor.isNull(lstColumnIndex.get(name)) ? null : cursor.getString(lstColumnIndex.get(name));
+    }
+
     private boolean transformCursorToBoolean(String name, Cursor cursor) {
         return transformCursorToInt(name, cursor) == 1;
+    }
+
+    private Boolean transformCursorToBooleanNull(String name, Cursor cursor) {
+        Integer integer = transformCursorToIntNull(name, cursor);
+        return integer == null ? null : integer == 1;
     }
 }
