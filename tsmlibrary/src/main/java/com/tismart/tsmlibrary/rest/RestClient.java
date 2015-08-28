@@ -38,30 +38,26 @@ public abstract class RestClient {
     protected final String URL;
     private AsyncTask<String, Void, WebServiceResponse> task;
 
-    protected RestClient(String url){
+    protected RestClient(String url) {
         URL = url;
     }
 
     //region Synchronous Methods
-    public void postSync(Context context, String service, String method, JSONObject request, RestCallback mCallback) throws NetworkException, IOException, JSONException {
+    public WebServiceResponse postSync(Context context, String service, String method, JSONObject request) throws NetworkException, IOException, JSONException {
         if (!ConnectionUtil.isNetworkAvailable(context)) {
             throw new NetworkException(context.getString(R.string.tsmlibrary_error_conexion));
         }
-        mCallback.OnStart();
-        WebServiceResponse serviceResponse = processPost(URL + service + method, request);
-        mCallback.OnResponse(serviceResponse.responseCode, serviceResponse.response);
+        return processPost(URL + service + method, request);
     }
 
-    public void getSync(Context context, String service, String method, RestCallback mCallback) throws NetworkException, IOException, JSONException {
+    public WebServiceResponse getSync(Context context, String service, String method) throws NetworkException, IOException, JSONException {
         if (!ConnectionUtil.isNetworkAvailable(context)) {
             throw new NetworkException(context.getString(R.string.tsmlibrary_error_conexion));
         }
         URL url = new URL(URL + service + method);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         try {
-            mCallback.OnStart();
-            WebServiceResponse serviceResponse = processGet(URL + service + method);
-            mCallback.OnResponse(serviceResponse.responseCode, serviceResponse.response);
+            return processGet(URL + service + method);
         } finally {
             urlConnection.disconnect();
         }
@@ -99,7 +95,7 @@ public abstract class RestClient {
 
             @Override
             protected void onCancelled() {
-                mCallback.OnResponse(ResponseCode.HTTP_ERROR_UNRECOGNIZED,new JSONObject());
+                mCallback.OnResponse(ResponseCode.HTTP_ERROR_UNRECOGNIZED, new JSONObject());
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, URL + service + method, request.toString());
     }
@@ -135,7 +131,7 @@ public abstract class RestClient {
 
             @Override
             protected void onCancelled() {
-                mCallback.OnResponse(ResponseCode.HTTP_ERROR_UNRECOGNIZED,new JSONObject());
+                mCallback.OnResponse(ResponseCode.HTTP_ERROR_UNRECOGNIZED, new JSONObject());
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, URL + service + method);
     }
@@ -214,7 +210,7 @@ public abstract class RestClient {
         return sb.toString();
     }
 
-    private class WebServiceResponse {
+    public class WebServiceResponse {
         ResponseCode responseCode;
         JSONObject response;
 
