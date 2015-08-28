@@ -10,6 +10,6 @@ import java.lang.annotation.RetentionPolicy;
  */
 
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Entidad {
-    String tableName() default "";
+public @interface Entity {
+    String TableName() default "";
 }

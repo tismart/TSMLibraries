@@ -5,10 +5,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
-import com.tismart.tsmlibrary.database.annotations.Elemento;
-import com.tismart.tsmlibrary.database.annotations.Entidad;
+import com.tismart.tsmlibrary.database.annotations.Element;
+import com.tismart.tsmlibrary.database.annotations.Entity;
+import com.tismart.tsmlibrary.database.annotations.Key;
 import com.tismart.tsmlibrary.database.enums.DatabaseEnum;
-import com.tismart.tsmlibrary.database.enums.TipoElemento;
+import com.tismart.tsmlibrary.database.enums.ElementType;
+import com.tismart.tsmlibrary.database.enums.KeyType;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -21,28 +23,34 @@ public abstract class AbstractDAO<T> {
     final private Class<T> clase;
     final private SQLiteDatabase db = DatabaseInstance.getInstance().getDatabase();
     protected HashMap<String, Integer> lstColumnIndex;
-    private ArrayList<Field> lstPrimaryFields;
-    private HashMap<Field, Elemento> lstFieldElemento;
+    private HashMap<Field, Element> lstFieldElement;
+    private ArrayList<Field> lstKeys;
+    private HashMap<Field, Key> lstFieldKey;
 
     //region Inicialización
     protected AbstractDAO(Class<T> entidad) {
-        Entidad annotation = entidad.getAnnotation(Entidad.class);
-        tableName = annotation.tableName().length() > 0 ? annotation.tableName() : entidad.getSimpleName();
+        Entity annotation = entidad.getAnnotation(Entity.class);
+        tableName = annotation.TableName().length() > 0 ? annotation.TableName() : entidad.getSimpleName();
         clase = entidad;
 
         inicializeFieldElement();
         inicializeColumnIndex();
-        inicializePrimarykey();
     }
 
     private void inicializeFieldElement() {
-        if (lstFieldElemento == null) {
-            lstFieldElemento = new HashMap<>();
+        if (lstFieldElement == null) {
+            lstFieldElement = new HashMap<>();
+            lstFieldKey = new HashMap<>();
+            lstKeys = new ArrayList<>();
 
             for (Field f : clase.getDeclaredFields()) {
                 f.setAccessible(true);
-                if (f.isAnnotationPresent(Elemento.class)) {
-                    lstFieldElemento.put(f, f.getAnnotation(Elemento.class));
+                if (f.isAnnotationPresent(Element.class)) {
+                    lstFieldElement.put(f, f.getAnnotation(Element.class));
+                }
+                if (f.isAnnotationPresent(Key.class)) {
+                    lstFieldKey.put(f, f.getAnnotation(Key.class));
+                    lstKeys.add(f);
                 }
             }
         }
@@ -51,20 +59,8 @@ public abstract class AbstractDAO<T> {
     private void inicializeColumnIndex() {
         if (lstColumnIndex == null) {
             lstColumnIndex = new HashMap<>();
-            for (Elemento elemento : lstFieldElemento.values()) {
-                lstColumnIndex.put(elemento.columnName(), -1);
-            }
-        }
-    }
-
-    private void inicializePrimarykey() {
-        if (lstPrimaryFields == null) {
-            lstPrimaryFields = new ArrayList<>();
-            for (Field f : clase.getDeclaredFields()) {
-                f.setAccessible(true);
-                if (lstFieldElemento.containsKey(f) && lstFieldElemento.get(f).isPrimary()) {
-                    lstPrimaryFields.add(f);
-                }
+            for (Element elemento : lstFieldElement.values()) {
+                lstColumnIndex.put(elemento.ColumnName(), -1);
             }
         }
     }
@@ -77,8 +73,10 @@ public abstract class AbstractDAO<T> {
 
     public int updateEntity(T entidad) throws IllegalAccessException, DatabaseModificationException {
         ContentValues cv = transformEntityToContentValues(entidad);
-        for (Field f : lstPrimaryFields) {
-            cv.remove(lstFieldElemento.get(f).columnName());
+        for (Field f : lstKeys) {
+            if (lstFieldKey.get(f).TypeKey().equals(KeyType.PRIMARY)) {
+                cv.remove(lstFieldElement.get(f).ColumnName());
+            }
         }
         return actualizarEntidad(cv, getSelectionIdentifier(entidad));
     }
@@ -186,13 +184,13 @@ public abstract class AbstractDAO<T> {
 
     //  region Selection identifier
     private String getSelectionIdentifier(T entidad) throws IllegalAccessException {
-        Elemento elemento;
+        Element elemento;
         String mensaje = "";
         int cont = 0;
         for (Field field : lstPrimaryFields) {
             elemento = lstFieldElemento.get(field);
-            mensaje = elemento.columnName();
-            switch (elemento.elementType()) {
+            mensaje = elemento.ColumnName();
+            switch (elemento.TypeElement()) {
                 case STRING:
                 case LONG:
                     mensaje += " LIKE '" + field.get(entidad).toString() + "'";
@@ -216,13 +214,13 @@ public abstract class AbstractDAO<T> {
     }
 
     private String getSelectionIdentifier(Object[] ids) throws IllegalAccessException {
-        Elemento elemento;
+        Element elemento;
         String mensaje = "";
         int cont = 0;
         for (Field field : lstPrimaryFields) {
             elemento = lstFieldElemento.get(field);
-            mensaje = elemento.columnName();
-            switch (elemento.elementType()) {
+            mensaje = elemento.ColumnName();
+            switch (elemento.TypeElement()) {
                 case STRING:
                 case LONG:
                     mensaje += " LIKE '" + ids[cont] + "'";
@@ -256,9 +254,9 @@ public abstract class AbstractDAO<T> {
         Cursor cursor = null;
         try {
             if (lstPrimaryFields.size() == 1) {
-                Elemento elemento = lstPrimaryFields.get(0).getAnnotation(Elemento.class);
-                if (elemento.elementType().equals(TipoElemento.INTEGER) || elemento.elementType().equals(TipoElemento.LONG)) {
-                    cursor = db.query(tableName, new String[]{elemento.columnName()}, null, null, null, null, elemento.columnName() + " DESC");
+                Element elemento = lstPrimaryFields.get(0).getAnnotation(Element.class);
+                if (elemento.TypeElement().equals(ElementType.INTEGER) || elemento.TypeElement().equals(ElementType.LONG)) {
+                    cursor = db.query(tableName, new String[]{elemento.ColumnName()}, null, null, null, null, elemento.ColumnName() + " DESC");
                     if (cursor != null && cursor.moveToFirst()) {
                         return cursor.getInt(0);
                     }
@@ -414,41 +412,41 @@ public abstract class AbstractDAO<T> {
             for (Field f : clase.getDeclaredFields()) {
                 f.setAccessible(true);
                 if (lstFieldElemento.containsKey(f)) {
-                    Elemento elemento = lstFieldElemento.get(f);
-                    switch (elemento.elementType()) {
+                    Element elemento = lstFieldElemento.get(f);
+                    switch (elemento.TypeElement()) {
                         case INTEGER:
-                            if (elemento.isNull()) {
-                                cv.put(elemento.columnName(), f.get(entity) == null ? null : (Integer) f.get(entity));
+                            if (elemento.IsNull()) {
+                                cv.put(elemento.ColumnName(), f.get(entity) == null ? null : (Integer) f.get(entity));
                             } else {
-                                cv.put(elemento.columnName(), (int) f.get(entity));
+                                cv.put(elemento.ColumnName(), (int) f.get(entity));
                             }
                             break;
                         case LONG:
-                            if (elemento.isNull()) {
-                                cv.put(elemento.columnName(), f.get(entity) == null ? null : (Long) f.get(entity));
+                            if (elemento.IsNull()) {
+                                cv.put(elemento.ColumnName(), f.get(entity) == null ? null : (Long) f.get(entity));
                             } else {
-                                cv.put(elemento.columnName(), (long) f.get(entity));
+                                cv.put(elemento.ColumnName(), (long) f.get(entity));
                             }
                             break;
                         case STRING:
-                            cv.put(elemento.columnName(), f.get(entity) == null ? null : (String) f.get(entity));
+                            cv.put(elemento.ColumnName(), f.get(entity) == null ? null : (String) f.get(entity));
                             break;
                         case BOOLEAN:
-                            if (elemento.isNull()) {
-                                cv.put(elemento.columnName(), f.get(entity) == null ? null : (Boolean) f.get(entity));
+                            if (elemento.IsNull()) {
+                                cv.put(elemento.ColumnName(), f.get(entity) == null ? null : (Boolean) f.get(entity));
                             } else {
-                                cv.put(elemento.columnName(), (boolean) f.get(entity));
+                                cv.put(elemento.ColumnName(), (boolean) f.get(entity));
                             }
                             break;
                         case DOUBLE:
-                            if (elemento.isNull()) {
-                                cv.put(elemento.columnName(), f.get(entity) == null ? null : (Double) f.get(entity));
+                            if (elemento.IsNull()) {
+                                cv.put(elemento.ColumnName(), f.get(entity) == null ? null : (Double) f.get(entity));
                             } else {
-                                cv.put(elemento.columnName(), (double) f.get(entity));
+                                cv.put(elemento.ColumnName(), (double) f.get(entity));
                             }
                             break;
                         case BLOB:
-                            cv.put(elemento.columnName(), (byte[]) f.get(entity));
+                            cv.put(elemento.ColumnName(), (byte[]) f.get(entity));
                             break;
                     }
                 }
@@ -465,48 +463,48 @@ public abstract class AbstractDAO<T> {
             for (Field f : clase.getDeclaredFields()) {
                 f.setAccessible(true);
                 if (lstFieldElemento.containsKey(f)) {
-                    Elemento elemento = lstFieldElemento.get(f);
+                    Element elemento = lstFieldElemento.get(f);
 
-                    if (lstColumnIndex.get(elemento.columnName()) == -1) {
-                        lstColumnIndex.put(elemento.columnName(), cursor.getColumnIndex(elemento.columnName()));
+                    if (lstColumnIndex.get(elemento.ColumnName()) == -1) {
+                        lstColumnIndex.put(elemento.ColumnName(), cursor.getColumnIndex(elemento.ColumnName()));
                     }
 
-                    switch (elemento.elementType()) {
+                    switch (elemento.TypeElement()) {
                         case LONG:
-                            if (elemento.isNull()) {
-                                f.set(entidad, transformCursorToLongNull(elemento.columnName(), cursor));
+                            if (elemento.IsNull()) {
+                                f.set(entidad, transformCursorToLongNull(elemento.ColumnName(), cursor));
                             } else {
-                                f.setLong(entidad, transformCursorToLong(elemento.columnName(), cursor));
+                                f.setLong(entidad, transformCursorToLong(elemento.ColumnName(), cursor));
                             }
                             break;
                         case BLOB:
                             break;
                         case DOUBLE:
-                            if (elemento.isNull()) {
-                                f.set(entidad, transformCursorToDoubleNull(elemento.columnName(), cursor));
+                            if (elemento.IsNull()) {
+                                f.set(entidad, transformCursorToDoubleNull(elemento.ColumnName(), cursor));
                             } else {
-                                f.setDouble(entidad, transformCursorToDouble(elemento.columnName(), cursor));
+                                f.setDouble(entidad, transformCursorToDouble(elemento.ColumnName(), cursor));
                             }
                             break;
                         case BOOLEAN:
-                            if (elemento.isNull()) {
-                                f.set(entidad, transformCursorToBooleanNull(elemento.columnName(), cursor));
+                            if (elemento.IsNull()) {
+                                f.set(entidad, transformCursorToBooleanNull(elemento.ColumnName(), cursor));
                             } else {
-                                f.setBoolean(entidad, transformCursorToBoolean(elemento.columnName(), cursor));
+                                f.setBoolean(entidad, transformCursorToBoolean(elemento.ColumnName(), cursor));
                             }
                             break;
                         case STRING:
-                            if (elemento.isNull()) {
-                                f.set(entidad, transformCursorToStringNull(elemento.columnName(), cursor));
+                            if (elemento.IsNull()) {
+                                f.set(entidad, transformCursorToStringNull(elemento.ColumnName(), cursor));
                             } else {
-                                f.set(entidad, transformCursorToString(elemento.columnName(), cursor));
+                                f.set(entidad, transformCursorToString(elemento.ColumnName(), cursor));
                             }
                             break;
                         case INTEGER:
-                            if (elemento.isNull()) {
-                                f.set(entidad, transformCursorToIntNull(elemento.columnName(), cursor));
+                            if (elemento.IsNull()) {
+                                f.set(entidad, transformCursorToIntNull(elemento.ColumnName(), cursor));
                             } else {
-                                f.setInt(entidad, transformCursorToInt(elemento.columnName(), cursor));
+                                f.setInt(entidad, transformCursorToInt(elemento.ColumnName(), cursor));
                             }
                             break;
                     }

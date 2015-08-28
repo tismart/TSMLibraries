@@ -1,8 +1,5 @@
 package com.tismart.myapplication.entities;
 
-import com.tismart.tsmlibrary.database.annotations.Elemento;
-import com.tismart.tsmlibrary.database.enums.TipoElemento;
-
 /**
  * Created by luis.burgos on 07/05/2015.
  *

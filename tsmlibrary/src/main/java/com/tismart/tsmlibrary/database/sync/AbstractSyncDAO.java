@@ -3,9 +3,6 @@ package com.tismart.tsmlibrary.database.sync;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.tismart.tsmlibrary.database.annotations.Elemento;
-import com.tismart.tsmlibrary.database.annotations.Entidad;
-
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
