@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
-version = "1.1.26"
+version = "1.1.27"
 def siteUrl = 'https://github.com/tismart/TSMLibraries'
 def gitUrl = 'https://github.com/tismart/TSMLibraries.git'
 group = "com.tismart.libraries"
@@ -15,7 +15,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 23
         versionCode 18
-        versionName "1.1.26"
+        versionName "1.1.27"
     }
     buildTypes {
         release {

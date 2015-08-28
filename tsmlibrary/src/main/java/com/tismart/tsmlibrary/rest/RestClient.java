@@ -211,8 +211,8 @@ public abstract class RestClient {
     }
 
     public class WebServiceResponse {
-        ResponseCode responseCode;
-        JSONObject response;
+        public ResponseCode responseCode;
+        public JSONObject response;
 
         public WebServiceResponse() {
             responseCode = ResponseCode.HTTP_ERROR_UNRECOGNIZED;
