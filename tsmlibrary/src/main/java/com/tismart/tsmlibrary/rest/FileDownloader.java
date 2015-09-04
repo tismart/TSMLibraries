@@ -101,4 +101,52 @@ public class FileDownloader {
             }
         }.execute(url_db, db_name);
     }
+
+    /**
+     * Clase que ejecuta la descarga de un archivo de base de datos, y la almacena en la carpeta de cache interna con el nombre de la base de datos. Se tiene como timeout 1 minuto.
+     * @param context Contexto de la aplicación.
+     * @param url url de descarga del archivo.
+     * @param filename nombre del archivo.
+     * @param connectionTimeout tiempo en milisegundos de espera hasta que de timeout
+     * @param listener contiene los métodos para poder seguir la descarga del archivo.
+     */
+    public static void executeSync(Context context, String url, String filename, int connectionTimeout, DatabaseDownloadListener listener) {
+        executeSyncDownloader(context, url, filename, connectionTimeout, listener);
+    }
+
+    private static void executeSyncDownloader(final Context context, String url_db, String db_name, final int connectionTimeout, final DatabaseDownloadListener listener) {
+        boolean aBoolean;
+        listener.onStart();
+        try {
+            URL url = new URL(url_db);
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setConnectTimeout(connectionTimeout);
+            urlConnection.setReadTimeout(connectionTimeout);
+            urlConnection.connect();
+            long mTotalSize = urlConnection.getContentLength();
+            InputStream input = new BufferedInputStream(url.openStream(),
+                    8192);
+            File f = new File(context.getCacheDir(), db_name);
+            OutputStream output = new FileOutputStream(f);
+            byte data[] = new byte[1024];
+            long total = 0;
+            int count;
+            while ((count = input.read(data)) != -1) {
+                total += count;
+                listener.publishProgress(((double) total / (double) mTotalSize) * 100);
+                output.write(data, 0, count);
+            }
+            output.flush();
+            output.close();
+            input.close();
+            aBoolean = true;
+        } catch (Exception ex) {
+            aBoolean = false;
+        }
+        if (aBoolean) {
+            listener.onCompleted();
+        } else {
+            listener.onError();
+        }
+    }
 }
