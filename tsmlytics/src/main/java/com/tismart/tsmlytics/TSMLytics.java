@@ -183,7 +183,6 @@ public class TSMLytics {
      * <p>App.Name nombre de la aplicación en String</p>
      * <p>App.Icon ícono de la aplicación en Drawable</p>
      * <p>App.Package nombre del paquete de la aplicación en String</p>
-     * <p> </p>
      * <p>DEVICE INFO</p>
      * <p>Obtiene los estados de algunos elmentos del dispositivo. Este método siempre devuelve un dato diferente a null</p>
      * <p>Device.Baterry  = Porcentaje de batería en float</p>
@@ -191,7 +190,6 @@ public class TSMLytics {
      * <p>Device.Model = Modelo del dispositivo en String</p>
      * <p>Device.ID = ID del dispositivo Android.Secure.ID en String</p>
      * <p>Device.IsRooted = Si el dispositivo ha sido rooteado en boolean</p>
-     * <p> </p>
      * <p>DISK INFO</p>
      * <p>Obtiene la información del disco interno del dispositivo. Si hubiera una SD-Card conectada también obtiene la información de ella.</p>
      * <p>Si hay algún error el método devolverá null</p>
@@ -201,26 +199,22 @@ public class TSMLytics {
      * <p>Disk.ExternalFree = Disco externo libre en bytes long</p>
      * <p>Disk.ExternalUsed = Disco externo usado en bytes long</p>
      * <p>Disk.ExternalTotal = Disco externo total en bytes long</p>
-     * <p> </p>
      * <p>MEMORY INFO</p>
      * <p>Obtiene la información de la memoria del dispositivo.</p>
      * <p>Si hay algún error el método devolverá null</p>
      * <p>Memory.Free = Memoria libre en bytes long</p>
      * <p>Memory.Used = Memoria usado en bytes long</p>
      * <p>Memory.Total = Memoria total en bytes long</p>
-     * <p> </p>
      * <p>NETWORK INFO</p>
      * <p>Obtiene la información de la red del dispositivo.</p>
      * <p>Si hay algún error el método devolverá null</p>
      * <p>Network.Connection = Modo de conexión Wi-Fi, Mobile, Ethernet, Bluetooth en String</p>
      * <p>Network.Type = Tipo de conexión Wi-Fi, 3G, Edge entre otros en String</p>
      * <p>Network.Streght = Intensidad en la conexión. Siempre es un número negativo en String</p>
-     * <p> </p>
      * <p>OS INFO</p>
      * <p>Obtiene la información del dispositivo. Este método siempre devuelve un dato diferente a null</p>
      * <p>OS.Name = Nombre del sistema operativo en String</p>
      * <p>OS.Version = Versión del sistema operativo en String</p>
-     * <p> </p>
      * <p>SCREEN INFO</p>
      * <p>Obtiene la información de la pantalla del dispositivo.</p>
      * <p>Si hay algún error el método devolverá null</p>

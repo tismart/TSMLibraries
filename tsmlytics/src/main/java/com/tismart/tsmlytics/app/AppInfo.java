@@ -23,7 +23,6 @@ public class AppInfo {
      * <p>App.Name nombre de la aplicación en String</p>
      * <p>App.Icon ícono de la aplicación en Drawable</p>
      * <p>App.Package nombre del paquete de la aplicación en String</p>
-     * <p>@param mContext contexto de la aplicación</p>
      * @return ArrayList-App
      */
     public static ArrayList<App> getAppInfo(Context mContext) {
