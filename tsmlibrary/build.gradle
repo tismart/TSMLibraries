@@ -63,7 +63,7 @@ install {
             project {
                 packaging 'aar'
                 //noinspection GroovyAssignabilityCheck
-                name 'Libreria con clases helpers para el desarrollo de aplicaciones m�viles'
+                name 'Libreria con clases helpers para el desarrollo de aplicaciones móviles'
                 url siteUrl
                 licenses {
                     license {
