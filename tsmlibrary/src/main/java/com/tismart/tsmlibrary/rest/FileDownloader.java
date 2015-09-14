@@ -21,42 +21,45 @@ import java.net.URL;
 @SuppressWarnings({"unused", "ResultOfMethodCallIgnored", "WeakerAccess"})
 public class FileDownloader {
 
-    private static final int MILISECONDS = 1000;
-    private static final int SECONDS = 60;
+    private static final int SECOND = 1000;
+    private static final int MINUTE = 60 * SECOND;
 
     /**
      * Clase que ejecuta la descarga de un archivo de base de datos, y la almacena en la carpeta de cache interna con el nombre de la base de datos. Se tiene como timeout 1 minuto.
-     * @param context Contexto de la aplicación.
-     * @param url url de descarga del archivo.
+     *
+     * @param context  Contexto de la aplicación.
+     * @param url      url de descarga del archivo.
      * @param filename nombre del archivo.
      * @param listener contiene los métodos para poder seguir la descarga del archivo.
      */
     public static void execute(Context context, String url, String filename, DatabaseDownloadListener listener) {
-        executeDownloader(context, url, filename, MILISECONDS * SECONDS, listener);
+        executeDownloader(context, url, filename, MINUTE, listener);
     }
 
     /**
      * Clase que ejecuta la descarga de un archivo de base de datos, y la almacena en la carpeta de cache interna con el nombre de la base de datos. Se tiene como timeout 1 minuto.
-     * @param context Contexto de la aplicación.
-     * @param url url de descarga del archivo.
-     * @param filename nombre del archivo.
+     *
+     * @param context           Contexto de la aplicación.
+     * @param url               url de descarga del archivo.
+     * @param filename          nombre del archivo.
      * @param connectionTimeout tiempo en milisegundos de espera hasta que de timeout
-     * @param listener contiene los métodos para poder seguir la descarga del archivo.
+     * @param listener          contiene los métodos para poder seguir la descarga del archivo.
      */
     public static void execute(Context context, String url, String filename, int connectionTimeout, DatabaseDownloadListener listener) {
         executeDownloader(context, url, filename, connectionTimeout, listener);
     }
 
     private static void executeDownloader(final Context context, String url_db, String db_name, final int connectionTimeout, final DatabaseDownloadListener listener) {
-        new AsyncTask<String, Double, Boolean>() {
-
+        new AsyncTask<String, Long, ResultExecute>() {
+            ResultExecute result;
             @Override
             protected void onPreExecute() {
                 listener.onStart();
+                result = new ResultExecute();
             }
 
             @Override
-            protected Boolean doInBackground(String... strings) {
+            protected ResultExecute doInBackground(String... strings) {
                 try {
                     URL url = new URL(strings[0]);
                     HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -73,30 +76,31 @@ public class FileDownloader {
                     int count;
                     while ((count = input.read(data)) != -1) {
                         total += count;
-                        publishProgress(((double)total / (double)mTotalSize)*100);
+                        publishProgress(total, mTotalSize);
                         output.write(data, 0, count);
                     }
                     output.flush();
                     output.close();
                     input.close();
+                    result.result = true;
                 } catch (Exception ex) {
-                    return false;
+                    result.exception = ex;
+                    result.result = false;
                 }
-
-                return true;
+                return result;
             }
 
             @Override
-            protected void onProgressUpdate(Double... values) {
-                listener.publishProgress(values[0]);
+            protected void onProgressUpdate(Long... values) {
+                listener.publishProgress(((int) (values[0] / values[1])) * 100, values[0], values[1]);
             }
 
             @Override
-            protected void onPostExecute(Boolean aBoolean) {
-                if (aBoolean) {
+            protected void onPostExecute(ResultExecute result) {
+                if (result.result) {
                     listener.onCompleted();
                 } else {
-                    listener.onError();
+                    listener.onError(result.exception);
                 }
             }
         }.execute(url_db, db_name);
@@ -104,19 +108,34 @@ public class FileDownloader {
 
     /**
      * Clase que ejecuta la descarga de un archivo de base de datos, y la almacena en la carpeta de cache interna con el nombre de la base de datos. Se tiene como timeout 1 minuto.
-     * @param context Contexto de la aplicación.
-     * @param url url de descarga del archivo.
-     * @param filename nombre del archivo.
+     *
+     * @param context           Contexto de la aplicación.
+     * @param url               url de descarga del archivo.
+     * @param filename          nombre del archivo.
+     * @param listener          contiene los métodos para poder seguir la descarga del archivo.
+     */
+    public static void executeSync(Context context, String url, String filename, DatabaseDownloadListener listener) {
+        executeSyncDownloader(context, url, filename, MINUTE, listener);
+    }
+
+    /**
+     * Clase que ejecuta la descarga de un archivo de base de datos, y la almacena en la carpeta de cache interna con el nombre de la base de datos. Se tiene como timeout 1 minuto.
+     *
+     * @param context           Contexto de la aplicación.
+     * @param url               url de descarga del archivo.
+     * @param filename          nombre del archivo.
      * @param connectionTimeout tiempo en milisegundos de espera hasta que de timeout
-     * @param listener contiene los métodos para poder seguir la descarga del archivo.
+     * @param listener          contiene los métodos para poder seguir la descarga del archivo.
      */
     public static void executeSync(Context context, String url, String filename, int connectionTimeout, DatabaseDownloadListener listener) {
         executeSyncDownloader(context, url, filename, connectionTimeout, listener);
     }
 
-    private static void executeSyncDownloader(final Context context, String url_db, String db_name, final int connectionTimeout, final DatabaseDownloadListener listener) {
+    private static void executeSyncDownloader(final Context context, String url_db, String db_name, int connectionTimeout, final DatabaseDownloadListener listener) {
         boolean aBoolean;
+        ResultExecute result;
         listener.onStart();
+        result = new ResultExecute();
         try {
             URL url = new URL(url_db);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -133,20 +152,26 @@ public class FileDownloader {
             int count;
             while ((count = input.read(data)) != -1) {
                 total += count;
-                listener.publishProgress(((double) total / (double) mTotalSize) * 100);
+                listener.publishProgress(((int) (total / mTotalSize)) * 100, total, mTotalSize);
                 output.write(data, 0, count);
             }
             output.flush();
             output.close();
             input.close();
-            aBoolean = true;
+            result.result = true;
         } catch (Exception ex) {
-            aBoolean = false;
+            result.result = false;
+            result.exception = ex;
         }
-        if (aBoolean) {
+        if (result.result) {
             listener.onCompleted();
         } else {
-            listener.onError();
+            listener.onError(result.exception);
         }
+    }
+
+    private static class ResultExecute{
+        public Exception exception;
+        public boolean result;
     }
 }

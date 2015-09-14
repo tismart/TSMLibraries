@@ -9,9 +9,9 @@ package com.tismart.tsmlibrary.rest.interfaces;
 public interface DatabaseDownloadListener {
     void onStart();
 
-    void publishProgress(double progress);
+    void publishProgress(int progress, long avance, long total);
 
     void onCompleted();
 
-    void onError();
+    void onError(Exception ex);
 }

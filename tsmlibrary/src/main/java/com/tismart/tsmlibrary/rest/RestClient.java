@@ -35,6 +35,9 @@ public abstract class RestClient {
     private final static String APPLICATION_JSON = "application/json";
     private final static String CHARSET = "UTF-8";
 
+    private final static int SECONDS = 1000;
+    private final static int MINUTE = 60 * SECONDS;
+
     protected final String URL;
     private AsyncTask<String, Void, WebServiceResponse> task;
 
@@ -47,20 +50,28 @@ public abstract class RestClient {
         if (!ConnectionUtil.isNetworkAvailable(context)) {
             throw new NetworkException(context.getString(R.string.tsmlibrary_error_conexion));
         }
-        return processPost(URL + service + method, request);
+        return processPost(URL + service + method, request, MINUTE);
+    }
+
+    public WebServiceResponse postSync(Context context, String service, String method, int timeOut, JSONObject request) throws NetworkException, IOException, JSONException {
+        if (!ConnectionUtil.isNetworkAvailable(context)) {
+            throw new NetworkException(context.getString(R.string.tsmlibrary_error_conexion));
+        }
+        return processPost(URL + service + method, request, timeOut);
     }
 
     public WebServiceResponse getSync(Context context, String service, String method) throws NetworkException, IOException, JSONException {
         if (!ConnectionUtil.isNetworkAvailable(context)) {
             throw new NetworkException(context.getString(R.string.tsmlibrary_error_conexion));
         }
-        URL url = new URL(URL + service + method);
-        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-        try {
-            return processGet(URL + service + method);
-        } finally {
-            urlConnection.disconnect();
+        return processGet(URL + service + method, MINUTE);
+    }
+
+    public WebServiceResponse getSync(Context context, String service, String method, int timeOut) throws NetworkException, IOException, JSONException {
+        if (!ConnectionUtil.isNetworkAvailable(context)) {
+            throw new NetworkException(context.getString(R.string.tsmlibrary_error_conexion));
         }
+        return processGet(URL + service + method, timeOut);
     }
 
     //endregion
@@ -81,7 +92,42 @@ public abstract class RestClient {
             protected WebServiceResponse doInBackground(String... strings) {
                 WebServiceResponse wsservice = new WebServiceResponse();
                 try {
-                    wsservice = processPost(strings[0], new JSONObject(strings[1]));
+                    wsservice = processPost(strings[0], new JSONObject(strings[1]),MINUTE);
+                } catch (IOException | JSONException ex) {
+                    ex.printStackTrace();
+                }
+                return wsservice;
+            }
+
+            @Override
+            protected void onPostExecute(WebServiceResponse response) {
+                mCallback.OnResponse(response.responseCode, response.response);
+            }
+
+            @Override
+            protected void onCancelled() {
+                mCallback.OnResponse(ResponseCode.HTTP_ERROR_UNRECOGNIZED, new JSONObject());
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, URL + service + method, request.toString());
+    }
+
+    public void postAsync(Context context, String service, String method, JSONObject request,final int timeOut, final RestCallback mCallback) throws NetworkException {
+        if (!ConnectionUtil.isNetworkAvailable(context)) {
+            throw new NetworkException(context.getString(R.string.tsmlibrary_error_conexion));
+        }
+        task = new AsyncTask<String, Void, WebServiceResponse>() {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                mCallback.OnStart();
+            }
+
+            @Override
+            protected WebServiceResponse doInBackground(String... strings) {
+                WebServiceResponse wsservice = new WebServiceResponse();
+                try {
+                    wsservice = processPost(strings[0], new JSONObject(strings[1]),timeOut);
                 } catch (IOException | JSONException ex) {
                     ex.printStackTrace();
                 }
@@ -117,7 +163,43 @@ public abstract class RestClient {
                 WebServiceResponse wsservice = new WebServiceResponse();
                 try {
                     String url = strings[0];
-                    wsservice = processGet(url);
+                    wsservice = processGet(url,MINUTE);
+                } catch (IOException | JSONException ex) {
+                    ex.printStackTrace();
+                }
+                return wsservice;
+            }
+
+            @Override
+            protected void onPostExecute(WebServiceResponse response) {
+                mCallback.OnResponse(response.responseCode, response.response);
+            }
+
+            @Override
+            protected void onCancelled() {
+                mCallback.OnResponse(ResponseCode.HTTP_ERROR_UNRECOGNIZED, new JSONObject());
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, URL + service + method);
+    }
+
+    public void getAsync(Context context, String service, String method,final int timeOut, final RestCallback mCallback) throws NetworkException, IOException {
+        if (!ConnectionUtil.isNetworkAvailable(context)) {
+            throw new NetworkException(context.getString(R.string.tsmlibrary_error_conexion));
+        }
+        task = new AsyncTask<String, Void, WebServiceResponse>() {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                mCallback.OnStart();
+            }
+
+            @Override
+            protected WebServiceResponse doInBackground(String... strings) {
+                WebServiceResponse wsservice = new WebServiceResponse();
+                try {
+                    String url = strings[0];
+                    wsservice = processGet(url,timeOut);
                 } catch (IOException | JSONException ex) {
                     ex.printStackTrace();
                 }
@@ -138,14 +220,15 @@ public abstract class RestClient {
 
     //endregion
     //region Process methods
-    private WebServiceResponse processPost(String str_url, JSONObject request) throws IOException, JSONException {
+    private WebServiceResponse processPost(String str_url, JSONObject request, int timeOut) throws IOException, JSONException {
         WebServiceResponse wsresponse = new WebServiceResponse();
         Log.i("TSMLibrary - RestClient", "URL: " + str_url);
         Log.i("TSMLibrary - RestClient", "Request: " + request);
         URL url = new URL(str_url);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         try {
-            urlConnection.setConnectTimeout(60000);
+            urlConnection.setConnectTimeout(timeOut);
+            urlConnection.setReadTimeout(timeOut);
             urlConnection.setDoOutput(true);
             urlConnection.setRequestProperty(HTTP_POST_CONTENTTYPE, APPLICATION_JSON);
             OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
@@ -162,13 +245,14 @@ public abstract class RestClient {
         return wsresponse;
     }
 
-    private WebServiceResponse processGet(String str_url) throws IOException, JSONException {
+    private WebServiceResponse processGet(String str_url, int timeOut) throws IOException, JSONException {
         WebServiceResponse wsresponse = new WebServiceResponse();
         Log.i("TSMLibrary - RestClient", "URL: " + str_url);
         URL url = new URL(str_url);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         try {
-            urlConnection.setConnectTimeout(60000);
+            urlConnection.setConnectTimeout(timeOut);
+            urlConnection.setReadTimeout(timeOut);
             urlConnection.setRequestProperty(HTTP_POST_ACCEPT, APPLICATION_JSON);
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
             wsresponse.responseCode = ResponseCode.valueOf(urlConnection.getResponseCode());
