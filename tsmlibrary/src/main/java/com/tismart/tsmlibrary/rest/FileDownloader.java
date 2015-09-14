@@ -93,7 +93,7 @@ public class FileDownloader {
 
             @Override
             protected void onProgressUpdate(Long... values) {
-                listener.publishProgress(((int) (values[0] / values[1])) * 100, values[0], values[1]);
+                listener.publishProgress((int) (((values[0]*1.0f) / (values[1])*1.0f) * 100), values[0], values[1]);
             }
 
             @Override
