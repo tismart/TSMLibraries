@@ -9,7 +9,6 @@ import com.tismart.tsmlibrary.rest.RestClient;
 import com.tismart.tsmlibrary.rest.enums.ResponseCode;
 import com.tismart.tsmlibrary.rest.interfaces.DatabaseDownloadListener;
 import com.tismart.tsmlibrary.rest.interfaces.RestCallback;
-import com.tismart.tsmlytics.TSMLytics;
 
 import org.json.JSONObject;
 
@@ -21,8 +20,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        TSMLytics lytics = new TSMLytics(this);
-        lytics.getAllWithEntities();
 
         try {
             JSONObject jsonObject = new JSONObject();
