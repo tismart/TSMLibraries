@@ -191,7 +191,7 @@ public abstract class AbstractDAO<T> {
         int cont = 0;
         for (Field field : lstPrimaryFields) {
             elemento = lstFieldElemento.get(field);
-            mensaje = elemento.columnName();
+            mensaje += elemento.columnName();
             switch (elemento.elementType()) {
                 case STRING:
                 case LONG:
@@ -221,7 +221,7 @@ public abstract class AbstractDAO<T> {
         int cont = 0;
         for (Field field : lstPrimaryFields) {
             elemento = lstFieldElemento.get(field);
-            mensaje = elemento.columnName();
+            mensaje += elemento.columnName();
             switch (elemento.elementType()) {
                 case STRING:
                 case LONG:
