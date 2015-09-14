@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/TSMLibraries.iml" filepath="$PROJECT_DIR$/TSMLibraries.iml" />
-      <module fileurl="file://$PROJECT_DIR$/myapplication/myapplication.iml" filepath="$PROJECT_DIR$/myapplication/myapplication.iml" />
       <module fileurl="file://$PROJECT_DIR$/tsmlibrary/tsmlibrary.iml" filepath="$PROJECT_DIR$/tsmlibrary/tsmlibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/tsmlytics/tsmlytics.iml" filepath="$PROJECT_DIR$/tsmlytics/tsmlytics.iml" />
     </modules>

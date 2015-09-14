@@ -62,4 +62,8 @@ public class DatabaseInstance {
         existDatabase = getDBHelper().existsDatabase();
         return existDatabase;
     }
+
+    public void deleteDatabase() {
+        context.deleteDatabase(db_name);
+    }
 }
