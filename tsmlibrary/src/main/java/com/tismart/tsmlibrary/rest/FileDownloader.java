@@ -8,6 +8,7 @@ import com.tismart.tsmlibrary.rest.interfaces.DatabaseDownloadListener;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -112,10 +113,9 @@ public class FileDownloader {
      * @param context           Contexto de la aplicación.
      * @param url               url de descarga del archivo.
      * @param filename          nombre del archivo.
-     * @param listener          contiene los métodos para poder seguir la descarga del archivo.
      */
-    public static void executeSync(Context context, String url, String filename, DatabaseDownloadListener listener) {
-        executeSyncDownloader(context, url, filename, MINUTE, listener);
+    public static void executeSync(Context context, String url, String filename) throws IOException {
+        executeSyncDownloader(context, url, filename, MINUTE);
     }
 
     /**
@@ -125,17 +125,13 @@ public class FileDownloader {
      * @param url               url de descarga del archivo.
      * @param filename          nombre del archivo.
      * @param connectionTimeout tiempo en milisegundos de espera hasta que de timeout
-     * @param listener          contiene los métodos para poder seguir la descarga del archivo.
      */
-    public static void executeSync(Context context, String url, String filename, int connectionTimeout, DatabaseDownloadListener listener) {
-        executeSyncDownloader(context, url, filename, connectionTimeout, listener);
+    public static void executeSync(Context context, String url, String filename, int connectionTimeout) throws IOException {
+        executeSyncDownloader(context, url, filename, connectionTimeout);
     }
 
-    private static void executeSyncDownloader(final Context context, String url_db, String db_name, int connectionTimeout, final DatabaseDownloadListener listener) {
+    private static void executeSyncDownloader(final Context context, String url_db, String db_name, int connectionTimeout) throws IOException{
         boolean aBoolean;
-        ResultExecute result;
-        listener.onStart();
-        result = new ResultExecute();
         try {
             URL url = new URL(url_db);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -152,21 +148,14 @@ public class FileDownloader {
             int count;
             while ((count = input.read(data)) != -1) {
                 total += count;
-                listener.publishProgress(((int) (total / mTotalSize)) * 100, total, mTotalSize);
                 output.write(data, 0, count);
             }
             output.flush();
             output.close();
             input.close();
-            result.result = true;
-        } catch (Exception ex) {
-            result.result = false;
-            result.exception = ex;
-        }
-        if (result.result) {
-            listener.onCompleted();
-        } else {
-            listener.onError(result.exception);
+        }catch(IOException ioe){
+            ioe.printStackTrace();
+            throw ioe;
         }
     }
 
