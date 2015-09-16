@@ -36,9 +36,9 @@ public abstract class RestClient {
     private final static String CHARSET = "UTF-8";
 
     private final static int SECONDS = 1000;
-    private final static int MINUTE = 60 * SECONDS;
+    private final static int MINUTE = 30 * SECONDS;
 
-    protected final String URL;
+    protected String URL;
     private AsyncTask<String, Void, WebServiceResponse> task;
 
     protected RestClient(String url) {
