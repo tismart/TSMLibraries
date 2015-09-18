@@ -238,6 +238,7 @@ public abstract class RestClient {
             wsresponse.responseCode = ResponseCode.valueOf(urlConnection.getResponseCode());
             if (wsresponse.responseCode.equals(ResponseCode.HTTP_OK)) {
                 wsresponse.response = new JSONObject(convertStreamToString(in));
+                Log.i("TSMLibrary - RestClient", "Response: " + wsresponse.response);
             }
         } finally {
             urlConnection.disconnect();
@@ -258,6 +259,7 @@ public abstract class RestClient {
             wsresponse.responseCode = ResponseCode.valueOf(urlConnection.getResponseCode());
             if (wsresponse.responseCode.equals(ResponseCode.HTTP_OK)) {
                 wsresponse.response = new JSONObject(convertStreamToString(in));
+                Log.i("TSMLibrary - RestClient", "Response: " + wsresponse.response);
             }
         } finally {
             urlConnection.disconnect();
